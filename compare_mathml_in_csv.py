@@ -23,8 +23,8 @@ IGNORE_ATTRS = ['id', 'displaystyle', 'scriptlevel', 'xmlns',
                 'data-previous-space-width', 'data-following-space-width',
                 'data-empty-in-2d', 'data-width', 'data-function-guess',
                 'stretchy',
-                'columnspacing', 'rowspacing', 'rowlines', 'columnlines','minlabelspacing',
-                'columnalign', 'rowalign', 'equalcolumns', 'equalrows',
+                'columnspacing', 'rowspacing', 'rowlines', 'columnlines', 'minlabelspacing',
+                'columnalign', 'rowalign', 'equalcolumns', 'equalrows', 'align',
                 'mathcolor', 'mathbackground', 'mathsize', 'mathvariant']
 
 
