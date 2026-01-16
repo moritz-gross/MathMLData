@@ -172,7 +172,7 @@ def load_rust_test_data_pairs(max_pairs: int = 200) -> List[Dict[str, Any]]:
 
         # Ensure matching line counts
         if len(braille_lines) != len(mathml_lines):
-            print(f"Warning: Line count mismatch in RustTestData")
+            print("Warning: Line count mismatch in RustTestData")
             min_lines = min(len(braille_lines), len(mathml_lines))
             braille_lines = braille_lines[:min_lines]
             mathml_lines = mathml_lines[:min_lines]
@@ -240,14 +240,15 @@ def sample_few_shot_examples(example_pool: List[Dict[str, Any]],
 
 def build_system_prompt() -> str:
     """Build the system instruction for the model."""
-    return """You are an expert in Nemeth Braille mathematics notation. Your task is to translate Nemeth Braille expressions into valid MathML (Mathematical Markup Language) XML format.
+    return """You are an expert in Nemeth Braille mathematics notation.
+              Your task is to translate Nemeth Braille expressions into valid MathML (Mathematical Markup Language) XML format.
 
 NEMETH BRAILLE ENCODING RULES:
 
 Numbers and Digits:
 - ⠼ = Number indicator (starts a numeric sequence)
 - After ⠼, the following symbols represent digits:
-  ⠁=1, ⠆=2, ⠒=3, ⠲=4, ⠢=5, ⠖=6, ⠶=7, ⠦=8, ⠔=9, ⠴=0
+  ⠂=1, ⠆=2, ⠒=3, ⠲=4, ⠢=5, ⠖=6, ⠶=7, ⠦=8, ⠔=9, ⠴=0
 - Number sequences terminate at: space, letter (variable), or operation symbol
 - Example: ⠼⠁⠆ = "12" (number 12)
 - Example: ⠼⠆⠁ = "2a" (2 times variable a, NOT 21)
@@ -389,8 +390,6 @@ async def call_openai_model(client: AsyncOpenAI, prompt: str) -> Dict[str, Any]:
     }
 
 
-
-
 def extract_mathml_from_response(response_text: str) -> str:
     """
     Extract MathML from model response, handling cases where
@@ -411,9 +410,9 @@ def extract_mathml_from_response(response_text: str) -> str:
 # ============================================================================
 
 async def process_single_pair(client: AsyncOpenAI,
-                               test_pair: Dict[str, Any],
-                               example_pool: List[Dict[str, Any]],
-                               pair_id: int) -> Dict[str, Any]:
+                              test_pair: Dict[str, Any],
+                              example_pool: List[Dict[str, Any]],
+                              pair_id: int) -> Dict[str, Any]:
     """
     Process a single test pair.
 
@@ -523,7 +522,6 @@ def write_results_csv(results: List[Dict[str, Any]], output_path: Path):
         'error'
     ]
 
-
     with open(output_path, 'w', newline='', encoding='utf-8') as csvfile:
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
         writer.writeheader()
@@ -531,7 +529,6 @@ def write_results_csv(results: List[Dict[str, Any]], output_path: Path):
 
     print(f"\nResults written to: {output_path}")
     print(f"Total rows: {len(results)}")
-
 
 
 # ============================================================================
@@ -586,11 +583,11 @@ async def main():
         total_tokens = sum(r['total_tokens'] for r in successful)
         avg_response_time = sum(r['response_time_seconds'] for r in successful) / len(successful)
 
-        print(f"\nToken Usage:")
+        print("\nToken Usage:")
         print(f"  Average prompt tokens: {avg_prompt_tokens:.0f}")
         print(f"  Average completion tokens: {avg_completion_tokens:.0f}")
         print(f"  Total tokens used: {total_tokens:,}")
-        print(f"\nPerformance:")
+        print("\nPerformance:")
         print(f"  Average response time: {avg_response_time:.2f}s")
 
     print(f"\nOutput file: {output_csv}")
