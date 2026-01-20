@@ -164,10 +164,10 @@ if __name__ == "__main__":
 
     braille = braille[220:420]
     mathml = mathml[220:420]
-    model = "gemini-3-flash-preview"
-    # model = "gemini-3-pro-preview"
+    # model = "gemini-3-flash-preview"
+    model = "gemini-3-pro-preview"
     brailleCode = "Nemeth"
     n_examples = examples.count('\n')
     print(f"Running test with {n_examples} examples, {len(braille)} tests with {model} for {brailleCode}.")
-    mathml_output = convert_ueb_unicode_to_mathml(instructions, braille, "gemini-3-flash-preview")
+    mathml_output = convert_ueb_unicode_to_mathml(instructions, braille, model)
     write_results_to_file(braille, mathml_output, mathml, f"{brailleCode}-{model}-{n_examples}exs-{len(braille)}tsts.txt")
