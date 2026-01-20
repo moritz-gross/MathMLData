@@ -6,12 +6,11 @@ import os
 import logging
 from concurrent.futures import ProcessPoolExecutor, as_completed
 from tqdm import tqdm
-import libmathcat_py as libmathcat
-
-import sys
 from pathlib import Path
+import sys
 parent_dir = str(Path(__file__).resolve().parent.parent)
 sys.path.append(parent_dir)
+import libmathcat_py as libmathcat
 
 sys.stdout.reconfigure(encoding='utf-8')  # in case print statements are used for debugging
 
@@ -89,11 +88,11 @@ def ProcessFile(file_path: str, dest_folder: str, config: dict[str, str]) -> str
 
 def main():
     source_dir = "../SimpleSpeakData"
-    source_subdir = "highschool"
+    source_subdir = "college"
     output_dir = "./Braille"
 
     # Extra settings to pass to workers
-    settings = {"BrailleCode": "UEB"}
+    settings = {"BrailleCode": "Nemeth"}
     max_workers = 24   # set 24 for core 9 ultra
 
     if not os.path.exists(output_dir):
