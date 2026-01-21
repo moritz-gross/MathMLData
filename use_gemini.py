@@ -2,7 +2,6 @@ from logging import config
 import os
 import sys
 from compare_mathml_in_csv import setMathCATPreferences, areCanonicallyEqual, CanonicalResults
-import itertools
 from google import genai
 from google.genai import types
 import json
@@ -11,13 +10,13 @@ import re
 sys.stdout.reconfigure(encoding='utf-8')   # Ensure UTF-8 output for Unicode Braille
 
 
-def convert_braille_unicode_to_mathml(instructions: str, braille_input: list[str], model: str) -> str:
+def convert_braille_unicode_to_mathml(instructions: str, braille_input: list[str], model: str, apiKeyName: str) -> str:
     """
-    Uses Gemini 3 Flash Preview to convert a Unicode UEB Braille string to MathML.
+    Uses Gemini o convert a Unicode UEB Braille string to MathML.
     """
 
     # 1. Setup Client
-    api_key = os.environ.get("GEMINI_API_KEY")
+    api_key = os.environ.get(apiKeyName)
     if not api_key:
         raise ValueError("Please set the GEMINI_API_KEY environment variable.")
 
@@ -26,17 +25,12 @@ def convert_braille_unicode_to_mathml(instructions: str, braille_input: list[str
     try:
         start_time = time.time()
         response = client.models.generate_content(
-            model="gemini-3-flash-preview",
-            # model="gemini-3-pro-preview",
+            model=model,
             config=types.GenerateContentConfig(
                 system_instruction=instructions,
                 temperature=0.1,  # Low temperature for precision
-                response_mime_type="application/json",  # Crucial: Forces JSON output
-                response_schema=list[str]               # Crucial: Defines the shape
             ),
             contents=str(braille_input),
-            config=config, # Ensure your config is passed here
-            timeout=600  # seconds
         )
 
         end_time = time.time()
@@ -69,18 +63,21 @@ def convert_braille_unicode_to_mathml(instructions: str, braille_input: list[str
         raise Exception(f"Error during content generation: {e}")
 
     try:
-        print(f"response.text='...{response.text[len(response.text)-900:]}'")  # Print last 900 characters of response for debugging
-        json_str = response.text
-        as_list = json.loads(json_str)
-        print(f"last five items of as_list=...\n{'\n'.join(as_list[len(as_list)-5:])}\n")  # Print last 5 items for debugging
+        print(f"start of response.text='{response.text[:200]}'")  # Print first 200 characters of response for debugging
+        print(f"end of response.text='{response.text[len(response.text)-200:]}'")  # Print last 200 characters of response for debugging
+        text = response.text
+        i_start = text.find("<math")
+        i_end = text.rfind("</math>") + len("</math>")
+        if i_start == -1 or i_end == -1:
+            raise Exception("Could not find MathML tags in the response.")
+        as_list = text[i_start:i_end].split("|next-item|")
+        as_list = [item.strip() for item in as_list if item.strip()]  # Clean up whitespace and remove empty strings
+        print(f"len response={len(as_list)}")
+        print(f"first five items of as_list=...\n{'\n'.join(as_list[:5])}\n")  # Print first 5 items for debugging
         return as_list
     except Exception as e:
-        # Try to parse the response text if possible (sometimes the string is truncated)
-        pattern = r'"((?:[^"\\]|\\.)*)"'    # Regex to match strings
-        as_list = re.findall(pattern, json_str)
-        print(f"\n***Error during conversion: {e}. Partial {len(as_list)} results extracted out of {len(braille_input)} tests\n")
-        return as_list
-
+        raise Exception(f"Error parsing response: {e}")
+    
 
 def write_results_to_file(braille_tests: list[str], computed_output: list[str], expected_output: list[str], output_file: str) -> None:
     """
@@ -100,7 +97,7 @@ def write_results_to_file(braille_tests: list[str], computed_output: list[str], 
         match_count = 0
         f.write("\nNOT Normalized MathML\n")
         f.write("Test Braille | Match | Expected MathML | Computed MathML\n")
-        for tests, computed, expected in itertools.zip(braille_tests, computed_output, expected_output, fillvalue=""):
+        for tests, computed, expected in zip(braille_tests, computed_output, expected_output):
             try:
                 checked = areCanonicallyEqual(expected, computed)
                 if checked.isEqual:
@@ -112,7 +109,7 @@ def write_results_to_file(braille_tests: list[str], computed_output: list[str], 
 
         f.write("\nNormalized MathML\n")
         f.write("Test Braille | Match | Expected MathML | Computed MathML\n")
-        for tests, computed, expected in itertools.zip(braille_tests, computed_output, expected_output, fillvalue=""):
+        for tests, computed, expected in zip(braille_tests, computed_output, expected_output):
             try:
                 checked = areCanonicallyEqual(expected, computed)
             except Exception as e:
@@ -169,7 +166,7 @@ if __name__ == "__main__":
         "For each braille input, output ONLY the raw MathML string starting with <math> and ending with </math>. "
         "Every element in the MathML must be properly closed and nested. "
         "Do not include markdown formatting, explanations, or any other text."
-        "Return the results as a python list of strings, where each string is the MathML translation of the corresponding braille input. "
+        "Add '|next-item|' between each MathML output. "
         "Below are some examples of braille/MathML pairs separated by '|' that should be considered the ground truth:\n"
     )
 
@@ -185,16 +182,20 @@ if __name__ == "__main__":
         print("Error: Number of test inputs does not match number of expected outputs.")
         sys.exit(1)
 
-    braille = braille[220:420]
-    mathml = mathml[220:420]
-    # model = "gemini-3-flash-preview"
-    model = "gemini-3-pro-preview"
+    range = slice(220, 320)
+    braille = braille[range]
+    mathml = mathml[range]
+    model = "gemini-3-flash-preview"
+    model = "gemini-2.5-flash"
+    # model = "gemini-2.0-flash-lite"
+    # model = "gemini-3-pro-preview"
     brailleCode = "Nemeth"
+    apiKeyName = "GEMINI_PAID_API_KEY"
+    apiKeyName = "GEMINI_API_KEY"
     n_examples = examples.count('\n')
     print(f"Running test with {n_examples} examples, {len(braille)} tests with {model} for {brailleCode}.")
     try:
-        mathml_output = convert_braille_unicode_to_mathml(instructions, braille, model)
+        mathml_output = convert_braille_unicode_to_mathml(instructions, braille, model, apiKeyName)
+        write_results_to_file(braille, mathml_output, mathml, f"{brailleCode}-{model}-{n_examples}exs-{len(braille)}tsts.txt")
     except Exception as e:
         print(f"Conversion error: {e}")
-    finally:
-        write_results_to_file(braille, mathml_output, mathml, f"{brailleCode}-{model}-{n_examples}exs-{len(braille)}tsts.txt")
