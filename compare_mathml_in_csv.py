@@ -21,7 +21,7 @@ sys.stdout.reconfigure(encoding='utf-8')  # in case print statements are used fo
 
 
 # Attributes to ignore during comparison (might need a few more)
-IGNORE_ATTRS = ['id', 'displaystyle', 'scriptlevel', 'xmlns',
+IGNORE_ATTRS = ['id', 'class', 'displaystyle', 'scriptlevel', 'xmlns',
                 'data-id-added', 'data-added', 'data-changed',
                 'data-previous-space-width', 'data-following-space-width',
                 'data-empty-in-2d', 'data-width', 'data-function-guess',
