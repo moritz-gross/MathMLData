@@ -1,3 +1,4 @@
+from logging import config
 import os
 import sys
 from compare_mathml_in_csv import setMathCATPreferences, areCanonicallyEqual, CanonicalResults
@@ -10,7 +11,7 @@ import re
 sys.stdout.reconfigure(encoding='utf-8')   # Ensure UTF-8 output for Unicode Braille
 
 
-def convert_ueb_unicode_to_mathml(instructions: str, braille_input: list[str], model: str) -> str:
+def convert_braille_unicode_to_mathml(instructions: str, braille_input: list[str], model: str) -> str:
     """
     Uses Gemini 3 Flash Preview to convert a Unicode UEB Braille string to MathML.
     """
@@ -34,6 +35,8 @@ def convert_ueb_unicode_to_mathml(instructions: str, braille_input: list[str], m
                 response_schema=list[str]               # Crucial: Defines the shape
             ),
             contents=str(braille_input),
+            config=config, # Ensure your config is passed here
+            timeout=600  # seconds
         )
 
         end_time = time.time()
@@ -46,6 +49,26 @@ def convert_ueb_unicode_to_mathml(instructions: str, braille_input: list[str], m
         else:
             print("   No usage metadata returned.")
 
+        # 1. Check if the prompt itself was blocked
+        if response.prompt_feedback and response.prompt_feedback.block_reason:
+            print(f"Blocked Input: {response.prompt_feedback.block_reason}")
+            raise
+            
+        # 2. Check if the response was blocked or incomplete
+        elif response.candidates:
+            candidate = response.candidates[0]
+            if candidate.finish_reason != "STOP":
+                print(f"Blocked Output. Reason: {candidate.finish_reason}")
+                # Optional: Print safety details
+                print(candidate.safety_ratings)
+                raise Exception("Output was blocked or incomplete.")
+        else:
+            raise Exception("Response contained no candidates (unexpected state).")
+
+    except Exception as e:
+        raise Exception(f"Error during content generation: {e}")
+
+    try:
         print(f"response.text='...{response.text[len(response.text)-900:]}'")  # Print last 900 characters of response for debugging
         json_str = response.text
         as_list = json.loads(json_str)
@@ -77,7 +100,7 @@ def write_results_to_file(braille_tests: list[str], computed_output: list[str], 
         match_count = 0
         f.write("\nNOT Normalized MathML\n")
         f.write("Test Braille | Match | Expected MathML | Computed MathML\n")
-        for tests, computed, expected in itertools.zip_longest(braille_tests, computed_output, expected_output, fillvalue=""):
+        for tests, computed, expected in itertools.zip(braille_tests, computed_output, expected_output, fillvalue=""):
             try:
                 checked = areCanonicallyEqual(expected, computed)
                 if checked.isEqual:
@@ -89,7 +112,7 @@ def write_results_to_file(braille_tests: list[str], computed_output: list[str], 
 
         f.write("\nNormalized MathML\n")
         f.write("Test Braille | Match | Expected MathML | Computed MathML\n")
-        for tests, computed, expected in itertools.zip_longest(braille_tests, computed_output, expected_output, fillvalue=""):
+        for tests, computed, expected in itertools.zip(braille_tests, computed_output, expected_output, fillvalue=""):
             try:
                 checked = areCanonicallyEqual(expected, computed)
             except Exception as e:
@@ -169,5 +192,9 @@ if __name__ == "__main__":
     brailleCode = "Nemeth"
     n_examples = examples.count('\n')
     print(f"Running test with {n_examples} examples, {len(braille)} tests with {model} for {brailleCode}.")
-    mathml_output = convert_ueb_unicode_to_mathml(instructions, braille, model)
-    write_results_to_file(braille, mathml_output, mathml, f"{brailleCode}-{model}-{n_examples}exs-{len(braille)}tsts.txt")
+    try:
+        mathml_output = convert_braille_unicode_to_mathml(instructions, braille, model)
+    except Exception as e:
+        print(f"Conversion error: {e}")
+    finally:
+        write_results_to_file(braille, mathml_output, mathml, f"{brailleCode}-{model}-{n_examples}exs-{len(braille)}tsts.txt")
