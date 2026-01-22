@@ -1,0 +1,30 @@
+<math><mrow><msup><mi>x</mi><mn>2</mn></msup><mo accent="false" stretchy="false">→</mo><mi mathvariant="normal">∞</mi></mrow></math>
+<math><mrow><mi>x</mi><mo>=</mo><mn>3</mn><mtext>,</mtext></mrow></math>
+<math><mrow><msup><mi>f</mi><mo data-mjx-alternate="1">″</mo></msup><mo stretchy="false">(</mo><mi>a</mi><mo stretchy="false">)</mo><mtext>,</mtext></mrow></math>
+<math><mrow><mi>f</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>=</mo><msqrt><mi>x</mi></msqrt><mtext>.</mtext></mrow></math>
+<math><mrow><mi>f</mi><mo stretchy="false">(</mo><mi>t</mi><mo stretchy="false">)</mo><mo>=</mo><mi>ln</mi><mo data-mjx-texclass="NONE">⁡</mo><mo stretchy="false">(</mo><msup><mi>t</mi><mn>3</mn></msup><mo>+</mo><mn>3</mn><mo stretchy="false">)</mo></mrow></math>
+<math><mrow><msub><mi>A</mi><mi>◻</mi></msub><mo>=</mo><msup><mi>s</mi><mn>2</mn></msup><mo>=</mo><msup><mrow data-mjx-texclass="INNER"><mo data-mjx-texclass="OPEN">(</mo><mfrac><mrow><mn>20</mn><mo>−</mo><mi>x</mi></mrow><mn>4</mn></mfrac><mo data-mjx-texclass="CLOSE">)</mo></mrow><mn>2</mn></msup><mtext>.</mtext></mrow></math>
+<math><mrow><msup><mi>C</mi><mo data-mjx-alternate="1">′</mo></msup><mo stretchy="false">(</mo><mn>0</mn><mo stretchy="false">)</mo><mo>=</mo><mn>158</mn><mn>000</mn></mrow></math>
+<math><mrow><mi>P</mi><mo>≈</mo><mn>0.172</mn></mrow></math>
+<math><mrow><mroot><msub><mi>a</mi><mi>n</mi></msub><mi>n</mi></mroot><mo>≈</mo><mi>r</mi></mrow></math>
+<math><mrow><mo stretchy="false">|</mo><mi>r</mi><mo stretchy="false">|</mo><mo>≥</mo><mn>1</mn><mtext>.</mtext></mrow></math>
+<math><mrow><mo stretchy="false">(</mo><mn>2</mn><mo>,</mo><mi>f</mi><mo stretchy="false">(</mo><mn>2</mn><mo stretchy="false">)</mo><mo stretchy="false">)</mo></mrow></math>
+<math><mrow><mi>y</mi><mo>=</mo><mi>x</mi><mo>+</mo><mn>2</mn></mrow></math>
+<math><mrow><mi>y</mi><mo>=</mo><mo>−</mo><mn>2</mn><mtext>.</mtext></mrow></math>
+<math><mrow><msubsup><mo data-mjx-texclass="OP">∫</mo><mn>2</mn><mn>5</mn></msubsup><mi>x</mi><msup><mi>e</mi><msup><mi>x</mi><mn>2</mn></msup></msup><mspace width="0.167em"></mspace><mi>d</mi><mi>x</mi><mo>=</mo><msubsup><mo data-mjx-texclass="OP">∫</mo><mrow data-mjx-texclass="ORD"><mi>x</mi><mo>=</mo><mn>2</mn></mrow><mrow data-mjx-texclass="ORD"><mi>x</mi><mo>=</mo><mn>5</mn></mrow></msubsup><mi>x</mi><msup><mi>e</mi><msup><mi>x</mi><mn>2</mn></msup></msup><mspace width="0.167em"></mspace><mi>d</mi><mi>x</mi><mtext>.</mtext></mrow></math>
+<math><mrow><mfrac><mrow><mi>d</mi><mi>y</mi></mrow><mrow><mi>d</mi><mi>t</mi></mrow></mfrac><mo>=</mo><mi>t</mi><mo>−</mo><mn>2</mn><mo>,</mo><mtext> </mtext><mtext> </mtext><mi>y</mi><mo stretchy="false">(</mo><mn>0</mn><mo stretchy="false">)</mo><mo>=</mo><mn>1</mn><mtext>.</mtext></mrow></math>
+<math><mrow><mi>f</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>=</mo><mi>a</mi><mo stretchy="false">(</mo><mi>x</mi><mo>−</mo><mi>h</mi><msup><mo stretchy="false">)</mo><mn>2</mn></msup><mo>+</mo><mi>k</mi></mrow></math>
+<math><mrow><mi>f</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>=</mo><mi>ln</mi><mo data-mjx-texclass="NONE">⁡</mo><mo stretchy="false">(</mo><mn>2</mn><msup><mi>x</mi><mn>2</mn></msup><mo>+</mo><mn>1</mn><mo stretchy="false">)</mo></mrow></math>
+<math><mrow><mi>v</mi><mo stretchy="false">(</mo><mi>a</mi><mo stretchy="false">)</mo><mtext>,</mtext></mrow></math>
+<math><mn>35</mn></math>
+<math><mrow><mo stretchy="false">|</mo><mi>x</mi><mo stretchy="false">|</mo><mo>&gt;</mo><mn>1</mn><mtext>.</mtext></mrow></math>
+<math><mrow><mi>B</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mtext>,</mtext></mrow></math>
+<math><mrow><mi>x</mi><mo>+</mo><mn>2</mn></mrow></math>
+<math><mrow><mi>y</mi><mo>=</mo><mn>12</mn><mo>−</mo><mn>2</mn><msup><mi>x</mi><mn>2</mn></msup></mrow></math>
+<math><mrow><mo data-mjx-texclass="OP">∫</mo><msup><mi>e</mi><mi>x</mi></msup><mi>sin</mi><mo data-mjx-texclass="NONE">⁡</mo><mo stretchy="false">(</mo><msup><mi>e</mi><mi>x</mi></msup><mo stretchy="false">)</mo><mspace width="0.167em"></mspace><mi>d</mi><mi>x</mi><mo>=</mo><mo>−</mo><mi>cos</mi><mo data-mjx-texclass="NONE">⁡</mo><mo stretchy="false">(</mo><msup><mi>e</mi><mi>x</mi></msup><mo stretchy="false">)</mo><mo>+</mo><mi>C</mi><mtext>.</mtext></mrow></math>
+<math><msub><mi>y</mi><mn>2</mn></msub></math>
+<math><mrow><mi>P</mi><mo stretchy="false">(</mo><mn>500</mn><mo stretchy="false">)</mo><mo>≈</mo><mn>3012.3</mn></mrow></math>
+<math><mrow><mi>r</mi><msub><mi>S</mi><mi>n</mi></msub><mo>=</mo><mi>a</mi><mi>r</mi><mo>+</mo><mi>a</mi><msup><mi>r</mi><mn>2</mn></msup><mo>+</mo><mi>a</mi><msup><mi>r</mi><mn>3</mn></msup><mo>+</mo><mo>⋯</mo><mo>+</mo><mi>a</mi><msup><mi>r</mi><mi>n</mi></msup><mtext>.</mtext></mrow></math>
+<math><mrow><mfrac><mi>d</mi><mrow><mi>d</mi><mi>x</mi></mrow></mfrac><msubsup><mo data-mjx-texclass="OP">∫</mo><mi>x</mi><mi>a</mi></msubsup><mi>ln</mi><mo data-mjx-texclass="NONE">⁡</mo><mo stretchy="false">(</mo><mi>ln</mi><mo data-mjx-texclass="NONE">⁡</mo><mo stretchy="false">(</mo><mi>t</mi><mo stretchy="false">)</mo><mo stretchy="false">)</mo><mspace width="0.167em"></mspace><mi>d</mi><mi>t</mi><mo>=</mo></mrow></math>
+<math><mo data-mjx-texclass="OP">∫</mo></math>
+<math><mrow><mfrac><mi>d</mi><mrow><mi>d</mi><mi>x</mi></mrow></mfrac><mo stretchy="false">[</mo><mi>sin</mi><mo data-mjx-texclass="NONE">⁡</mo><mo stretchy="false">(</mo><mi>u</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo stretchy="false">)</mo><mo stretchy="false">]</mo><mo>=</mo><mi>cos</mi><mo data-mjx-texclass="NONE">⁡</mo><mo stretchy="false">(</mo><mi>u</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo stretchy="false">)</mo><mo>⋅</mo><msup><mi>u</mi><mo data-mjx-alternate="1">′</mo></msup><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mtext>.</mtext></mrow></math>

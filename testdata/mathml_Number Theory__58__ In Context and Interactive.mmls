@@ -1,0 +1,30 @@
+<math><mrow><msub><mi>p</mi><mrow data-mjx-texclass="ORD"><mi>n</mi><mo>−</mo><mn>1</mn></mrow></msub><mtext>,</mtext></mrow></math>
+<math><mrow><msup><mi>x</mi><mn>2</mn></msup><mo>+</mo><msup><mi>y</mi><mn>2</mn></msup><mo>=</mo><mo stretchy="false">(</mo><msup><mi>x</mi><mo data-mjx-alternate="1">′</mo></msup><msup><mo stretchy="false">)</mo><mn>2</mn></msup><msup><mi>a</mi><mn>2</mn></msup><mo>+</mo><mo stretchy="false">(</mo><msup><mi>y</mi><mo data-mjx-alternate="1">′</mo></msup><msup><mo stretchy="false">)</mo><mn>2</mn></msup><msup><mi>a</mi><mn>2</mn></msup><mo>=</mo><msup><mi>z</mi><mn>2</mn></msup></mrow></math>
+<math><msub><mi>x</mi><mrow data-mjx-texclass="ORD"><mi>p</mi><mo>−</mo><mn>2</mn></mrow></msub></math>
+<math><mrow><mi>a</mi><mo>∈</mo><mi mathvariant="double-struck">Z</mi><mtext>,</mtext></mrow></math>
+<math><mrow data-mjx-texclass="INNER"><mo data-mjx-texclass="OPEN">⌊</mo><mfrac><mrow><mn>3</mn><mi>e</mi></mrow><mi>p</mi></mfrac><mo data-mjx-texclass="CLOSE">⌋</mo></mrow></math>
+<math><mrow><mrow data-mjx-texclass="INNER"><mo data-mjx-texclass="OPEN">(</mo><mfrac><mn>9</mn><mn>167</mn></mfrac><mo data-mjx-texclass="CLOSE">)</mo></mrow><mo>⋅</mo><mrow data-mjx-texclass="INNER"><mo data-mjx-texclass="OPEN">(</mo><mfrac><mn>11</mn><mn>167</mn></mfrac><mo data-mjx-texclass="CLOSE">)</mo></mrow><mo>=</mo><mrow data-mjx-texclass="INNER"><mo data-mjx-texclass="OPEN">(</mo><mfrac><msup><mn>3</mn><mn>2</mn></msup><mn>167</mn></mfrac><mo data-mjx-texclass="CLOSE">)</mo></mrow><mo>⋅</mo><mo>−</mo><mrow data-mjx-texclass="INNER"><mo data-mjx-texclass="OPEN">(</mo><mfrac><mn>167</mn><mn>11</mn></mfrac><mo data-mjx-texclass="CLOSE">)</mo></mrow></mrow></math>
+<math><mrow><mi>b</mi><mo>&gt;</mo><mn>0</mn></mrow></math>
+<math><mrow><mi>a</mi><mo>=</mo><mn>26</mn></mrow></math>
+<math><mrow><mi>n</mi><mo>&gt;</mo><mn>0</mn><mtext>,</mtext></mrow></math>
+<math><mn>0.15</mn></math>
+<math><mrow><mi>d</mi><mo>≤</mo><msqrt><mi>n</mi></msqrt><mtext>.</mtext></mrow></math>
+<math><mfrac><mi>n</mi><mi>e</mi></mfrac></math>
+<math><mrow><mi>p</mi><mo>&gt;</mo><mn>3</mn></mrow></math>
+<math><mrow><msup><mi>a</mi><msup><mn>2</mn><mrow data-mjx-texclass="ORD"><mi>k</mi><mo>−</mo><mn>2</mn></mrow></msup></msup><mo>=</mo><mn>1</mn><mo>+</mo><msup><mn>2</mn><mi>k</mi></msup><mo>⋅</mo><mi>m</mi></mrow></math>
+<math><mrow><mi>O</mi><mo stretchy="false">(</mo><mi>log</mi><mo data-mjx-texclass="NONE">⁡</mo><mo stretchy="false">(</mo><mi>n</mi><mo stretchy="false">)</mo><mo stretchy="false">)</mo></mrow></math>
+<math><mrow><mi>M</mi><mo>=</mo><msup><mi>c</mi><mn>2</mn></msup><mo>+</mo><msup><mi>d</mi><mn>2</mn></msup></mrow></math>
+<math><mrow><mi>n</mi><mo>=</mo><mn>100</mn><mtext>.</mtext></mrow></math>
+<math><mrow><mi>a</mi><mo>=</mo><mn>4</mn><mtext>.</mtext></mrow></math>
+<math><mrow><msup><mi>x</mi><mn>2</mn></msup><mo>≡</mo><mo>−</mo><mn>1</mn><mtext> (mod </mtext><mi>p</mi><mo stretchy="false">)</mo></mrow></math>
+<math><mrow><msup><mi>y</mi><mn>2</mn></msup><mo>+</mo><mn>1</mn><mtext>!</mtext></mrow></math>
+<math><mrow><munder><mo data-mjx-texclass="OP">∑</mo><mtable data-mjx-smallmatrix="true" columnspacing="0em" rowspacing="0.1em"><mtr><mtd><mrow><mtext>all divisors </mtext><mi>d</mi><mtext> with just one or zero</mtext></mrow></mtd></mtr><mtr><mtd><mrow><mtext> of each prime factor </mtext><msub><mi>p</mi><mi>i</mi></msub><mtext> of </mtext><mi>n</mi></mrow></mtd></mtr></mtable></munder><mo stretchy="false">(</mo><mo>−</mo><mn>1</mn><msup><mo stretchy="false">)</mo><mrow data-mjx-texclass="ORD"><mi>ω</mi><mo stretchy="false">(</mo><mi>d</mi><mo stretchy="false">)</mo></mrow></msup><mo>=</mo><munder><mo data-mjx-texclass="OP">∑</mo><mrow data-mjx-texclass="ORD"><mi>d</mi><mtext> that work</mtext></mrow></munder><mo stretchy="false">(</mo><mn>1</mn><msup><mo stretchy="false">)</mo><mrow data-mjx-texclass="ORD"><mi>k</mi><mo>−</mo><mi>ω</mi><mo stretchy="false">(</mo><mi>d</mi><mo stretchy="false">)</mo></mrow></msup><mo stretchy="false">(</mo><mo>−</mo><mn>1</mn><msup><mo stretchy="false">)</mo><mrow data-mjx-texclass="ORD"><mi>ω</mi><mo stretchy="false">(</mo><mi>d</mi><mo stretchy="false">)</mo></mrow></msup><mtext>.</mtext></mrow></math>
+<math><mrow><mi>d</mi><mo stretchy="false">(</mo><mi>a</mi><mo>−</mo><mi>b</mi><mo stretchy="false">)</mo><mo>=</mo><mi>d</mi><mo stretchy="false">(</mo><mi>k</mi><mi>n</mi><mo stretchy="false">)</mo></mrow></math>
+<math><msub><mi>x</mi><mi>j</mi></msub></math>
+<math><mrow><msub><mi>x</mi><mn>0</mn></msub><mo>=</mo><mn>2</mn><mo>,</mo><msub><mi>x</mi><mn>1</mn></msub><mo>=</mo><mn>5</mn><mo>,</mo><msub><mi>x</mi><mn>2</mn></msub><mo>=</mo><mn>26</mn><mo>,</mo><msub><mi>x</mi><mn>3</mn></msub><mo>=</mo><mn>677</mn><mo>,</mo><msub><mi>x</mi><mn>4</mn></msub><mo>=</mo><mn>8735</mn><mo>,</mo><msub><mi>x</mi><mn>5</mn></msub><mo>=</mo><mn>8950</mn></mrow></math>
+<math><mrow><mn>33</mn><mi>x</mi><mo>≡</mo><mn>29</mn></mrow></math>
+<math><mn>99</mn></math>
+<math><mrow><mi>p</mi><mo>=</mo><mn>11</mn><mo>,</mo><mi>q</mi><mo>=</mo><mn>7</mn></mrow></math>
+<math><mrow><munderover><mo data-mjx-texclass="OP">∑</mo><mrow data-mjx-texclass="ORD"><mi>n</mi><mo>=</mo><mn>1</mn></mrow><mi mathvariant="normal">∞</mi></munderover><mfrac><mn>1</mn><msup><mi>n</mi><mn>2</mn></msup></mfrac></mrow></math>
+<math><mrow><mrow data-mjx-texclass="INNER"><mo data-mjx-texclass="OPEN">(</mo><mn>1</mn><mo>−</mo><mfrac><mn>2</mn><mi>p</mi></mfrac><mo data-mjx-texclass="CLOSE">)</mo></mrow><mo>=</mo><mrow data-mjx-texclass="INNER"><mo data-mjx-texclass="OPEN">(</mo><mn>1</mn><mo>−</mo><mfrac><mn>1</mn><mrow><mo stretchy="false">(</mo><mi>p</mi><mo>−</mo><mn>1</mn><msup><mo stretchy="false">)</mo><mn>2</mn></msup></mrow></mfrac><mo data-mjx-texclass="CLOSE">)</mo></mrow><msup><mrow data-mjx-texclass="INNER"><mo data-mjx-texclass="OPEN">(</mo><mn>1</mn><mo>−</mo><mfrac><mn>1</mn><mi>p</mi></mfrac><mo data-mjx-texclass="CLOSE">)</mo></mrow><mn>2</mn></msup><mtext>.</mtext></mrow></math>
+<math><mrow><mi>π</mi><msqrt><mn>2</mn></msqrt><mtext>,</mtext></mrow></math>

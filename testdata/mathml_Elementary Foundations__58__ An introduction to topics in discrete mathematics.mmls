@@ -1,0 +1,30 @@
+<math><mi>E</mi></math>
+<math><mrow><msub><mi mathvariant="double-struck">N</mi><mrow data-mjx-texclass="ORD"><mrow data-mjx-texclass="ORD"/><mo>&lt;</mo><mi>m</mi></mrow></msub><mtext>.</mtext></mrow></math>
+<math><mo>⋯</mo></math>
+<math><mrow><mo stretchy="false">(</mo><msub><mi>x</mi><mn>1</mn></msub><mo>,</mo><msub><mi>y</mi><mn>1</mn></msub><mo stretchy="false">)</mo><mo>≡</mo><mo stretchy="false">(</mo><msub><mi>x</mi><mn>2</mn></msub><mo>,</mo><msub><mi>y</mi><mn>2</mn></msub><mo stretchy="false">)</mo></mrow></math>
+<math><mrow><mi data-mjx-alternate="1">∅</mi><mtext>,</mtext></mrow></math>
+<math><mrow><mi>g</mi><mo data-mjx-texclass="PUNCT">:</mo><mi>B</mi><mo accent="false" stretchy="false">→</mo><mi>C</mi><mtext>,</mtext></mrow></math>
+<math><mrow><mi>m</mi><mo>=</mo><mn>147</mn><mo>+</mo><mn>1</mn><mo>=</mo><mn>148</mn></mrow></math>
+<math><mrow><mi>y</mi><mo>≥</mo><mn>0</mn><mtext>,</mtext></mrow></math>
+<math><mrow><msup><mi>n</mi><mn>2</mn></msup><mo>=</mo><mn>4</mn><msup><mi>m</mi><mn>2</mn></msup><mo>+</mo><mn>4</mn><mi>m</mi><mo>+</mo><mn>1</mn></mrow></math>
+<math><mrow><msub><mi>v</mi><mn>1</mn></msub><mo>,</mo><msub><mi>e</mi><mn>8</mn></msub><mo>,</mo><msub><mi>v</mi><mn>7</mn></msub><mo>,</mo><msub><mi>e</mi><mn>7</mn></msub><mo>,</mo><msub><mi>v</mi><mn>3</mn></msub><mo>,</mo><msub><mi>e</mi><mn>7</mn></msub><mo>,</mo><msub><mi>v</mi><mn>7</mn></msub><mo>,</mo><msub><mi>e</mi><mn>8</mn></msub><mo>,</mo><msub><mi>v</mi><mn>1</mn></msub><mtext>.</mtext></mrow></math>
+<math><mrow><mi>m</mi><mo>+</mo><mi>n</mi><mo>=</mo><mi>n</mi><mo>+</mo><mi>m</mi><mtext>,</mtext></mrow></math>
+<math><mrow><mi>A</mi><mo>=</mo><mo fence="false" stretchy="false">{</mo><mn>0</mn><mo>,</mo><mn>1</mn><mo>,</mo><mn>2</mn><mo>,</mo><mn>3</mn><mo fence="false" stretchy="false">}</mo></mrow></math>
+<math><mrow><msub><mi>A</mi><mn>1</mn></msub><mo>,</mo><msub><mi>A</mi><mn>2</mn></msub><mo>,</mo><mo>…</mo><mo>,</mo><msub><mi>A</mi><mi>m</mi></msub></mrow></math>
+<math><mrow><msup><mi mathvariant="normal">Σ</mi><mo>∗</mo></msup><mtext>?</mtext></mrow></math>
+<math><mrow><mi>x</mi><mo>&lt;</mo><mi>y</mi></mrow></math>
+<math><mrow><msubsup><mi>C</mi><mi>k</mi><mi>n</mi></msubsup><mtext>,</mtext></mrow></math>
+<math><mrow><mn>2</mn><mi>e</mi><mo>=</mo><mi>deg</mi><mo data-mjx-texclass="NONE">⁡</mo><msub><mi>v</mi><mn>1</mn></msub><mo>+</mo><mi>deg</mi><mo data-mjx-texclass="NONE">⁡</mo><msub><mi>v</mi><mn>2</mn></msub><mo>+</mo><mo>⋯</mo><mo>+</mo><mi>deg</mi><mo data-mjx-texclass="NONE">⁡</mo><msub><mi>v</mi><mi>n</mi></msub><mo>≥</mo><mi>d</mi><mo>+</mo><mi>d</mi><mo>+</mo><mo>⋯</mo><mo>+</mo><mi>d</mi><mo>=</mo><mi>n</mi><mi>d</mi><mtext>.</mtext></mrow></math>
+<math><mrow><mi>y</mi><mo>=</mo><msub><mi>x</mi><mn>0</mn></msub><mtext>.</mtext></mrow></math>
+<math><mrow><msub><mi>R</mi><mn>1</mn></msub><mo>∪</mo><msub><mi>R</mi><mn>2</mn></msub></mrow></math>
+<math><mrow><mo stretchy="false">(</mo><mi>a</mi><mo>,</mo><mi>b</mi><mo stretchy="false">)</mo><mtext>.</mtext></mrow></math>
+<math><mrow><msub><mi>a</mi><mn>1</mn></msub><mo>≡</mo><mi>x</mi><mtext>,</mtext></mrow></math>
+<math><msub><mi>W</mi><mn>2</mn></msub></math>
+<math><mrow><mi>f</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>=</mo><msup><mi>x</mi><mn>3</mn></msup></mrow></math>
+<math><mrow><msub><mi mathvariant="double-struck">N</mi><mrow data-mjx-texclass="ORD"><mrow data-mjx-texclass="ORD"/><mo>&lt;</mo><mi>ℓ</mi></mrow></msub><mo accent="false" stretchy="false">→</mo><msub><mi mathvariant="double-struck">N</mi><mrow data-mjx-texclass="ORD"><mrow data-mjx-texclass="ORD"/><mo>&lt;</mo><mi>m</mi></mrow></msub></mrow></math>
+<math><mrow><msup><mi mathvariant="normal">Ξ</mi><mo>∗</mo></msup><mo>⊆</mo><msup><mi mathvariant="normal">Σ</mi><mo>∗</mo></msup><mtext>,</mtext></mrow></math>
+<math><mrow><mi>f</mi><mo data-mjx-texclass="PUNCT">:</mo><mi>P</mi><mo accent="false" stretchy="false">→</mo><msup><mi mathvariant="normal">Σ</mi><mo>∗</mo></msup><mtext>,</mtext></mrow></math>
+<math><mrow><mn>2</mn><mo>∣</mo><mn>8</mn></mrow></math>
+<math><mrow><mi>x</mi><mo>∈</mo><msup><mrow data-mjx-texclass="ORD"><mo stretchy="false">(</mo><mi>A</mi><mo>∪</mo><mi>B</mi><mo stretchy="false">)</mo></mrow><mi mathvariant="normal">c</mi></msup></mrow></math>
+<math><mrow><msub><mi>K</mi><mrow data-mjx-texclass="ORD"><mi>n</mi><mo>−</mo><mn>1</mn></mrow></msub><mtext>,</mtext></mrow></math>
+<math><mrow><mi>A</mi><mo>=</mo><mi>B</mi></mrow></math>
