@@ -85,29 +85,18 @@ def ProcessFile(file_path: str, dest_folder: str, config: dict[str, str]) -> str
     except Exception as e:
         raise e
 
-
-def main():
-    source_dir = "../SimpleSpeakData"
-    source_subdir = "college"
-    output_dir = "./Braille"
-
-    # Extra settings to pass to workers
-    settings = {"BrailleCode": "Nemeth"}
-    max_workers = 24   # set 24 for core 9 ultra
-
-    if not os.path.exists(output_dir):
-        os.makedirs(output_dir)
+def ProcessAllFilesInDir(source_dir: str, dest_dir: str, config: dict[str, str], max_workers: int) -> None:
+    if not os.path.exists(dest_dir):
+        os.makedirs(dest_dir)
 
     file_paths: list[str] = []
-    for root, dirs, files in os.walk(f"{source_dir}/{source_subdir}"):
+    for root, dirs, files in os.walk(source_dir):
         # Add the files list to the all_files list
         file_paths.extend([f"{root}/{f}" for f in files if f.endswith('no-dups.mmls')])
 
     with ProcessPoolExecutor(max_workers=max_workers) as executor:
-        # Pass extra arguments inside executor.submit
-        # Syntax: executor.submit(fn, arg1, arg2, arg3...)
         future_to_file = {
-            executor.submit(ProcessFile, path, output_dir, settings): path
+            executor.submit(ProcessFile, path, dest_dir, config): path
             for path in file_paths
         }
 
@@ -118,6 +107,16 @@ def main():
                 except Exception as exc:
                     logging.error(f"Error on {future_to_file[future]}: {exc}")
                 pbar.update(1)
+
+
+def main():
+    dest_dir = "./Braille"
+
+    ProcessAllFilesInDir("../SimpleSpeakData/highschool", dest_dir, {"BrailleCode": "Nemeth"}, max_workers=24)
+    ProcessAllFilesInDir("../SimpleSpeakData/college", dest_dir, {"BrailleCode": "Nemeth"}, max_workers=24)
+
+    ProcessAllFilesInDir("../SimpleSpeakData/highschool", dest_dir, {"BrailleCode": "UEB"}, max_workers=24)
+    ProcessAllFilesInDir("../SimpleSpeakData/college", dest_dir, {"BrailleCode": "UEB"}, max_workers=24)
 
 
 if __name__ == "__main__":
