@@ -25,7 +25,7 @@ IGNORE_ATTRS = ['id', 'class', 'displaystyle', 'scriptlevel', 'xmlns',
                 'data-id-added', 'data-added', 'data-changed',
                 'data-previous-space-width', 'data-following-space-width',
                 'data-empty-in-2d', 'data-width', 'data-function-guess',
-                'stretchy',
+                'stretchy', 'accent', 'accentover',
                 'columnspacing', 'rowspacing', 'rowlines', 'columnlines', 'minlabelspacing',
                 'columnalign', 'rowalign', 'equalcolumns', 'equalrows', 'align',
                 'mathcolor', 'mathbackground', 'mathsize', 'mathvariant']
@@ -84,7 +84,6 @@ def strip_mathml_attributes(mathml_string: str, attributes_to_remove: list[str])
     return " ".join(str(soup).split())
 
 
-
 class CanonicalResults(NamedTuple):
     isEqual: bool
     canonicalOriginal: str
@@ -101,9 +100,13 @@ def areCanonicallyEqual(original: str, computed: str, error_text="") -> Canonica
 
     # Remove these after fixing the input data
     cannonicalOriginal: str = libmathcat.SetMathML(original)
-    cannonicalOriginal = strip_mathml_attributes(cannonicalOriginal, IGNORE_ATTRS).replace('<mtext', '<mi').replace('</mtext>', '</mi>').strip()
+    cannonicalOriginal = (strip_mathml_attributes(cannonicalOriginal, IGNORE_ATTRS)
+                          .replace('<mtext', '<mi')
+                          .replace('</mtext>', '</mi>').strip())
     canonicalComputed: str = libmathcat.SetMathML(computed)
-    canonicalComputed = strip_mathml_attributes(canonicalComputed, IGNORE_ATTRS).replace('<mtext', '<mi').replace('</mtext>', '</mi>').strip()
+    canonicalComputed = (strip_mathml_attributes(canonicalComputed, IGNORE_ATTRS)
+                         .replace('<mtext', '<mi')
+                         .replace('</mtext>', '</mi>').strip())
     result = cannonicalOriginal == canonicalComputed
     return CanonicalResults(result, cannonicalOriginal, canonicalComputed)
 
@@ -144,7 +147,8 @@ def process_mathml_csv(input_file: str) -> None:
     # results is a pandas Series of booleans
     for i in range(len(df)):
         try:
-            isEqual: bool = areCanonicallyEqual(df.at[i, 'ground_truth_mathml'], df.at[i, 'predicted_mathml'], f"Not the same: row {i+1}").isEqual
+            isEqual: bool = areCanonicallyEqual(df.at[i, 'ground_truth_mathml'], df.at[i, 'predicted_mathml'],
+                                                f"Not the same: row {i+1}").isEqual
             df.at[i, 'is_equal'] = "✓" if isEqual else "✗"
             if not isEqual:
                 failure_count += 1
