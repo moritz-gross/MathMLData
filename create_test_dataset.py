@@ -7,12 +7,13 @@ The test and example datasets are guaranteed to be disjoint per source file.
 
 import random
 from pathlib import Path
+from compare_mathml_in_csv import setMathCATPreferences, setMathMLForMathCAT
 
 
 def get_source_files(base_path):
     """Get all deduplicated source files from the highschool directory."""
     sources = []
-    for category in ['highschool']: # could also add "college" if desired
+    for category in ['highschool']:  # could also add "college" if desired
         category_path = base_path / category
         if category_path.exists():
             for file in category_path.glob('*-no-dups.*'):
@@ -100,8 +101,30 @@ def split_aligned_data(nemeth_file, ueb_file, mathml_file, sample_size):
     return (test_nemeth, test_ueb, test_mathml), (example_nemeth, example_ueb, example_mathml)
 
 
+def canonicalize_mathml_list(mathml_list: list[str]) -> list[str]:
+    """Canonicalize a list of MathML strings using libmathcat.setMathMLForMathCAT.
+    Returns a list with one MathML expression per line (newlines in MathML replaced with spaces).
+    """
+    canonicalized = []
+    for mathml in mathml_list:
+        mathml_stripped = mathml.strip()
+        if not mathml_stripped:
+            canonicalized.append('\n')
+            continue
+        try:
+            canonical = setMathMLForMathCAT(mathml_stripped)
+            canonicalized.append(canonical + '\n')
+        except Exception as e:
+            print(f"Warning: Error canonicalizing MathML: {e}")
+            canonicalized.append('\n')
+    return canonicalized
+
+
 def main():
     random.seed(42)
+
+    # Initialize MathCAT
+    setMathCATPreferences({})
 
     project_root = Path(__file__).parent
     nemeth_base = project_root / 'BrailleData' / 'Braille' / 'Nemeth'
@@ -109,6 +132,8 @@ def main():
     mathml_base = project_root / 'SimpleSpeakData'
     test_output_dir = project_root / 'test_data'
     example_output_dir = project_root / 'example_data'
+    test_canonical_output_dir = test_output_dir / 'CanonicalMathML'
+    example_canonical_output_dir = example_output_dir / 'CanonicalMathML'
 
     excluded_sources = {
         'Adventures of Small Number__58__ A collection of short stories',
@@ -139,16 +164,22 @@ def main():
 
         # Sample disjoint aligned data
         (test_nemeth, test_ueb, test_mathml), (ex_nemeth, ex_ueb, ex_mathml) = split_aligned_data(
-            nemeth_file, ueb_file, mathml_file, sample_size=110
+            nemeth_file, ueb_file, mathml_file, sample_size=120
         )
 
-        write_samples(test_output_dir, 'nemeth', source_name, '.brls', test_nemeth)
-        write_samples(test_output_dir, 'ueb', source_name, '.brls', test_ueb)
-        write_samples(test_output_dir, 'mathml', source_name, '.mmls', test_mathml)
+        write_samples(test_output_dir, 'Nemeth', source_name, '.brls', test_nemeth)
+        write_samples(test_output_dir, 'UEB', source_name, '.brls', test_ueb)
+        write_samples(test_output_dir, 'MathML', source_name, '.mmls', test_mathml)
 
-        write_samples(example_output_dir, 'nemeth', source_name, '.brls', ex_nemeth)
-        write_samples(example_output_dir, 'ueb', source_name, '.brls', ex_ueb)
-        write_samples(example_output_dir, 'mathml', source_name, '.mmls', ex_mathml)
+        write_samples(example_output_dir, 'Nemeth', source_name, '.brls', ex_nemeth)
+        write_samples(example_output_dir, 'UEB', source_name, '.brls', ex_ueb)
+        write_samples(example_output_dir, 'MathML', source_name, '.mmls', ex_mathml)
+
+        # Canonicalize test and example MathML entries
+        canonical_test_mathml = canonicalize_mathml_list(test_mathml)
+        canonical_example_mathml = canonicalize_mathml_list(ex_mathml)
+        write_samples(test_canonical_output_dir, '', source_name, '.mmls', canonical_test_mathml)
+        write_samples(example_canonical_output_dir, '', source_name, '.mmls', canonical_example_mathml)
 
         total_test_nemeth += len(test_nemeth)
         total_test_ueb += len(test_ueb)
@@ -158,9 +189,9 @@ def main():
         total_example_mathml += len(ex_mathml)
         processed += 1
 
-    print(f"\nCompleted!")
+    print("\nCompleted!")
     print(f"Processed {processed} sources")
-    print(f"Total samples:")
+    print("Total samples:")
     print(f"  - Test Nemeth: {total_test_nemeth}")
     print(f"  - Test UEB: {total_test_ueb}")
     print(f"  - Test MathML: {total_test_mathml}")
@@ -169,6 +200,8 @@ def main():
     print(f"  - Example MathML: {total_example_mathml}")
     print(f"\nTest dataset saved to: {test_output_dir}")
     print(f"Example dataset saved to: {example_output_dir}")
+    print(f"Test Canonical MathML dataset saved to: {test_canonical_output_dir}")
+    print(f"Example Canonical MathML dataset saved to: {example_canonical_output_dir}")
 
 
 if __name__ == '__main__':

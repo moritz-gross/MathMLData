@@ -7,7 +7,3 @@ SimpleSpeakData/*.csv
 SimpleSpeakData/plot*
 SimpleSpeakData/*.urls
 OldResults
-
-
-/test_data/
-/example_data/

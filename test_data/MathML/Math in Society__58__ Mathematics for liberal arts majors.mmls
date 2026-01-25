@@ -1,0 +1,120 @@
+<math><mrow><mn>4</mn><mo>/</mo><mn>7</mn></mrow></math>
+<math><mrow><mn>52</mn><mo>/</mo><mn>216</mn><mo>=</mo><mn>0.241</mn></mrow></math>
+<math><mrow><mn>23</mn><mo>/</mo><mn>216</mn><mo>=</mo><mn>0.107</mn></mrow></math>
+<math><mrow><mn>142</mn><mo>/</mo><mn>10</mn><mo>=</mo><mn>14.2</mn></mrow></math>
+<math><mo stretchy="false">→</mo></math>
+<math><mrow><mi>n</mi><mo>∗</mo><mi>t</mi></mrow></math>
+<math><mrow><mi>A</mi><mo>=</mo><mfrac><mrow><mi>d</mi><mrow data-mjx-texclass="INNER"><mo data-mjx-texclass="OPEN">(</mo><msup><mrow data-mjx-texclass="INNER"><mo data-mjx-texclass="OPEN">(</mo><mn>1</mn><mo>+</mo><mfrac><mi>r</mi><mi>n</mi></mfrac><mo data-mjx-texclass="CLOSE">)</mo></mrow><mrow data-mjx-texclass="ORD"><mi>n</mi><mi>t</mi></mrow></msup><mo>−</mo><mn>1</mn><mo data-mjx-texclass="CLOSE">)</mo></mrow></mrow><mrow data-mjx-texclass="INNER"><mo data-mjx-texclass="OPEN">(</mo><mfrac><mi>r</mi><mi>n</mi></mfrac><mo data-mjx-texclass="CLOSE">)</mo></mrow></mfrac><mtext> or </mtext><mi>d</mi><mo>=</mo><mfrac><mrow><mi>A</mi><mrow data-mjx-texclass="INNER"><mo data-mjx-texclass="OPEN">(</mo><mfrac><mi>r</mi><mi>n</mi></mfrac><mo data-mjx-texclass="CLOSE">)</mo></mrow></mrow><mrow data-mjx-texclass="INNER"><mo data-mjx-texclass="OPEN">(</mo><msup><mrow data-mjx-texclass="INNER"><mo data-mjx-texclass="OPEN">(</mo><mn>1</mn><mo>+</mo><mfrac><mi>r</mi><mi>n</mi></mfrac><mo data-mjx-texclass="CLOSE">)</mo></mrow><mrow data-mjx-texclass="ORD"><mi>n</mi><mi>t</mi></mrow></msup><mo>−</mo><mn>1</mn><mo data-mjx-texclass="CLOSE">)</mo></mrow></mfrac></mrow></math>
+<math><mrow><mi>n</mi><mo>=</mo><mn>1</mn><mtext>.</mtext></mrow></math>
+<math><mrow><mi>A</mi><mo>=</mo><mi>P</mi><mrow data-mjx-texclass="INNER"><mo data-mjx-texclass="OPEN">(</mo><mn>1</mn><mo>+</mo><mfrac><mi>r</mi><mi>n</mi></mfrac><mo data-mjx-texclass="CLOSE">)</mo></mrow><mo>+</mo><mi>d</mi></mrow></math>
+<math><mrow><mi>d</mi><mo>=</mo><mi mathvariant="normal">$</mi><mn>100</mn><mtext>,</mtext></mrow></math>
+<math><mrow><msub><mi>P</mi><mn>0</mn></msub><mo>=</mo><mn>0</mn></mrow></math>
+<math><mrow><msub><mi>P</mi><mn>1</mn></msub><mo>=</mo><mo stretchy="false">(</mo><mn>1.005</mn><mo stretchy="false">)</mo><msub><mi>P</mi><mn>0</mn></msub><mo>+</mo><mn>100</mn><mo>=</mo><mn>100</mn></mrow></math>
+<math><mrow><msub><mi>P</mi><mn>2</mn></msub><mo>=</mo><mo stretchy="false">(</mo><mn>1.005</mn><mo stretchy="false">)</mo><msub><mi>P</mi><mn>1</mn></msub><mo>+</mo><mn>100</mn><mo>=</mo><mo stretchy="false">(</mo><mn>1.005</mn><mo stretchy="false">)</mo><mo stretchy="false">(</mo><mn>100</mn><mo stretchy="false">)</mo><mo>+</mo><mn>100</mn><mo>=</mo><mn>100</mn><mo stretchy="false">(</mo><mn>1.005</mn><mo stretchy="false">)</mo><mo>+</mo><mn>100</mn></mrow></math>
+<math><mrow><msub><mi>P</mi><mi>m</mi></msub><mo>=</mo><mn>100</mn><mo stretchy="false">(</mo><mn>1.005</mn><msup><mo stretchy="false">)</mo><mrow data-mjx-texclass="ORD"><mi>m</mi><mo>−</mo><mn>1</mn></mrow></msup><mo>+</mo><mn>100</mn><mo stretchy="false">(</mo><mn>1.005</mn><msup><mo stretchy="false">)</mo><mrow data-mjx-texclass="ORD"><mi>m</mi><mo>−</mo><mn>2</mn></mrow></msup><mo>+</mo><mo>.</mo><mo>.</mo><mo>.</mo><mo>+</mo><mn>100</mn><mo stretchy="false">(</mo><mn>1.005</mn><mo stretchy="false">)</mo><mo>+</mo><mn>100</mn></mrow></math>
+<math><mrow><mi>m</mi><mo>−</mo><mn>2</mn></mrow></math>
+<math><mrow><mn>1.005</mn><msub><mi>P</mi><mi>m</mi></msub><mo>=</mo><mn>100</mn><mo stretchy="false">(</mo><mn>1.005</mn><msup><mo stretchy="false">)</mo><mi>m</mi></msup><mo>+</mo><mn>100</mn><mo stretchy="false">(</mo><mn>1.005</mn><msup><mo stretchy="false">)</mo><mrow data-mjx-texclass="ORD"><mi>m</mi><mo>−</mo><mn>1</mn></mrow></msup><mo>+</mo><mo>.</mo><mo>.</mo><mo>.</mo><mo>+</mo><mn>100</mn><mo stretchy="false">(</mo><mn>1.005</mn><msup><mo stretchy="false">)</mo><mn>2</mn></msup><mo>+</mo><mn>100</mn><mo stretchy="false">(</mo><mn>1.005</mn><mo stretchy="false">)</mo></mrow></math>
+<math><mrow><mn>0.005</mn><msub><mi>P</mi><mi>m</mi></msub><mo>=</mo><mn>100</mn><mo stretchy="false">(</mo><mo stretchy="false">(</mo><mn>1.005</mn><msup><mo stretchy="false">)</mo><mi>m</mi></msup><mo>−</mo><mn>1</mn><mo stretchy="false">)</mo></mrow></math>
+<math><mn>0.005</mn></math>
+<math><mrow><msup><mi>A</mi><mi>C</mi></msup><mtext>.</mtext></mrow></math>
+<math><mrow><mi>P</mi><mo stretchy="false">(</mo><msup><mi>A</mi><mi>C</mi></msup><mo stretchy="false">)</mo><mo>=</mo><mn>1</mn><mo>−</mo><mi>P</mi><mo stretchy="false">(</mo><mi>A</mi><mo stretchy="false">)</mo></mrow></math>
+<math><mrow><mi>P</mi><mo stretchy="false">(</mo><mi>A</mi><mtext> or </mtext><mi>B</mi><mo stretchy="false">)</mo><mo>=</mo><mi>P</mi><mo stretchy="false">(</mo><mi>A</mi><mo stretchy="false">)</mo><mo>+</mo><mi>P</mi><mo stretchy="false">(</mo><mi>B</mi><mo stretchy="false">)</mo><mo>–</mo><mi>P</mi><mo stretchy="false">(</mo><mi>A</mi><mtext> and </mtext><mi>B</mi><mo stretchy="false">)</mo></mrow></math>
+<math><mrow><mi>P</mi><mo stretchy="false">(</mo><mi>A</mi><mtext> and </mtext><mi>B</mi><mo stretchy="false">)</mo><mo>=</mo><mn>0</mn><mtext>.</mtext></mrow></math>
+<math><mrow><mn>180</mn><mo>−</mo><mn>52</mn><mo>=</mo><mn>128</mn></mrow></math>
+<math><mrow><mn>95</mn><mo>−</mo><mn>52</mn><mo>=</mo><mn>43</mn></mrow></math>
+<math><mrow><mn>250</mn><mo>−</mo><mn>180</mn><mo>=</mo><mn>70</mn></mrow></math>
+<math><mrow><mfrac><mn>128</mn><mn>250</mn></mfrac><mo>=</mo><mn>0.512</mn></mrow></math>
+<math><mrow><mn>128</mn><mo>+</mo><mn>52</mn><mo>+</mo><mn>43</mn><mo>=</mo><mn>223</mn></mrow></math>
+<math><mrow><mfrac><mn>223</mn><mn>250</mn></mfrac><mo>=</mo><mn>0.892</mn></mrow></math>
+<math><mrow><mtext>P(A)</mtext><mo>=</mo><mn>40</mn><mo>/</mo><mn>75</mn></mrow></math>
+<math><mrow><mtext>P(A given B)</mtext><mo>=</mo><mn>30</mn><mo>/</mo><mn>80</mn></mrow></math>
+<math><mn>30</mn></math>
+<math><mn>6</mn></math>
+<math><mn>7</mn></math>
+<math><mn>45</mn></math>
+<math><mn>19</mn></math>
+<math><mn>9</mn></math>
+<math><mrow><mi mathvariant="normal">$</mi><mn>15</mn><mo>,</mo><mn>000</mn><mo>–</mo><mi mathvariant="normal">$</mi><mn>3</mn><mo>,</mo><mn>000</mn><mo>=</mo><mi mathvariant="normal">$</mi><mn>12</mn><mo>,</mo><mn>000</mn></mrow></math>
+<math><mrow><mi>d</mi><mtext>:</mtext></mrow></math>
+<math><mrow><mi>t</mi><mo>=</mo><mn>3</mn><mtext>,</mtext></mrow></math>
+<math><mtable displaystyle="true" columnalign="right left" columnspacing="0em" rowspacing="3pt" minlabelspacing=".8em"><mtr><mtd><mi>d</mi></mtd><mtd><mrow><mi>&lt;mi/&gt;</mi><mo>=</mo><mfrac><mrow><mi>P</mi><mrow data-mjx-texclass="INNER"><mo data-mjx-texclass="OPEN">(</mo><mfrac><mi>r</mi><mi>n</mi></mfrac><mo data-mjx-texclass="CLOSE">)</mo></mrow></mrow><mrow data-mjx-texclass="INNER"><mo data-mjx-texclass="OPEN">(</mo><mn>1</mn><mo>−</mo><msup><mrow data-mjx-texclass="INNER"><mo data-mjx-texclass="OPEN">(</mo><mn>1</mn><mo>+</mo><mfrac><mi>r</mi><mi>n</mi></mfrac><mo data-mjx-texclass="CLOSE">)</mo></mrow><mrow data-mjx-texclass="ORD"><mo>−</mo><mi>n</mi><mi>t</mi></mrow></msup><mo data-mjx-texclass="CLOSE">)</mo></mrow></mfrac></mrow></mtd></mtr><mtr><mtd/><mtd><mrow><mi>&lt;mi/&gt;</mi><mo>=</mo><mfrac><mrow><mn>12000</mn><mrow data-mjx-texclass="INNER"><mo data-mjx-texclass="OPEN">(</mo><mfrac><mn>0.0275</mn><mn>12</mn></mfrac><mo data-mjx-texclass="CLOSE">)</mo></mrow></mrow><mrow data-mjx-texclass="INNER"><mo data-mjx-texclass="OPEN">(</mo><mn>1</mn><mo>−</mo><msup><mrow data-mjx-texclass="INNER"><mo data-mjx-texclass="OPEN">(</mo><mn>1</mn><mo>+</mo><mfrac><mn>0.0275</mn><mn>12</mn></mfrac><mo data-mjx-texclass="CLOSE">)</mo></mrow><mrow data-mjx-texclass="ORD"><mo>−</mo><mn>12</mn><mo>⋅</mo><mn>3</mn></mrow></msup><mo data-mjx-texclass="CLOSE">)</mo></mrow></mfrac></mrow></mtd></mtr><mtr><mtd/><mtd><mrow><mi>&lt;mi/&gt;</mi><mo>≈</mo><mi mathvariant="normal">$</mi><mn>347.65</mn></mrow></mtd></mtr></mtable></math>
+<math><mrow><mi mathvariant="normal">$</mi><mn>347.65</mn><mo stretchy="false">(</mo><mn>12</mn><mo stretchy="false">)</mo><mo stretchy="false">(</mo><mn>3</mn><mo stretchy="false">)</mo><mo>=</mo><mi mathvariant="normal">$</mi><mn>12</mn><mo>,</mo><mn>515.40</mn><mtext>.</mtext></mrow></math>
+<math><mrow><mi mathvariant="normal">$</mi><mn>221.00</mn><mo stretchy="false">(</mo><mn>12</mn><mo stretchy="false">)</mo><mo stretchy="false">(</mo><mn>5</mn><mo stretchy="false">)</mo><mo>=</mo><mi mathvariant="normal">$</mi><mn>13</mn><mo>,</mo><mn>260.00</mn><mtext>.</mtext></mrow></math>
+<math><mrow><mi>A</mi><mo>=</mo><mi>P</mi><msup><mrow data-mjx-texclass="INNER"><mo data-mjx-texclass="OPEN">(</mo><mn>1</mn><mo>+</mo><mfrac><mi>r</mi><mi>n</mi></mfrac><mo data-mjx-texclass="CLOSE">)</mo></mrow><mrow data-mjx-texclass="ORD"><mi>n</mi><mi>t</mi></mrow></msup><mtext> or </mtext><mi>P</mi><mo>=</mo><mfrac><mi>A</mi><msup><mrow data-mjx-texclass="INNER"><mo data-mjx-texclass="OPEN">(</mo><mn>1</mn><mo>+</mo><mfrac><mi>r</mi><mi>n</mi></mfrac><mo data-mjx-texclass="CLOSE">)</mo></mrow><mrow data-mjx-texclass="ORD"><mi>n</mi><mi>t</mi></mrow></msup></mfrac></mrow></math>
+<math><mi>e</mi></math>
+<math><mfrac><mrow><mtext>Party A Surplus Votes </mtext><mo>−</mo><mtext> Party B Surplus Votes</mtext></mrow><mtext>Total Votes</mtext></mfrac></math>
+<math><mrow><mn>100</mn><mi mathvariant="normal">%</mi><mo>÷</mo><mn>5</mn></mrow></math>
+<math><mrow><mfrac><mn>1</mn><mn>5</mn></mfrac><mo>=</mo><mn>0.20</mn></mrow></math>
+<math><mrow><mi>A</mi><mo>∧</mo><mi>B</mi></mrow></math>
+<math><mrow><mtext>not </mtext><mi>A</mi></mrow></math>
+<math><mn>3</mn></math>
+<math><mrow><mn>10</mn><mo>÷</mo><mn>2</mn><mo>=</mo><mn>5</mn><mtext>.</mtext></mrow></math>
+<math><mrow><mn>7</mn><mo>+</mo><mn>1</mn><mo>=</mo><mn>8</mn></mrow></math>
+<math><mrow><mn>8</mn><mo>+</mo><mn>2</mn><mo>=</mo><mn>10</mn></mrow></math>
+<math><mrow><mn>1</mn><mo>⋅</mo><mn>10</mn><mo>+</mo><mn>2</mn><mo>⋅</mo><mn>31</mn><mo>+</mo><mn>3</mn><mo>⋅</mo><mn>14</mn><mo>+</mo><mn>4</mn><mo>⋅</mo><mn>25</mn><mo>=</mo><mn>214</mn></mrow></math>
+<math><mrow><mn>68</mn><mi mathvariant="normal">%</mi><mo>÷</mo><mn>2</mn><mo>=</mo><mn>34</mn><mi mathvariant="normal">%</mi></mrow></math>
+<math><mrow><mn>27</mn><mi mathvariant="normal">%</mi><mo>÷</mo><mn>2</mn><mo>=</mo><mn>13.5</mn><mi mathvariant="normal">%</mi></mrow></math>
+<math><mrow><mn>100</mn><mi mathvariant="normal">%</mi><mo>−</mo><mn>99.7</mn><mi mathvariant="normal">%</mi><mo>=</mo><mn>0.3</mn><mi mathvariant="normal">%</mi></mrow></math>
+<math><mrow><mn>0.15</mn><mi mathvariant="normal">%</mi><mo>+</mo><mn>2.35</mn><mi mathvariant="normal">%</mi><mo>+</mo><mn>13.5</mn><mi mathvariant="normal">%</mi><mo>+</mo><mn>13.5</mn><mi mathvariant="normal">%</mi><mo>+</mo><mn>2.35</mn><mi mathvariant="normal">%</mi><mo>+</mo><mn>0.15</mn><mi mathvariant="normal">%</mi><mo>=</mo><mn>32</mn><mi mathvariant="normal">%</mi><mtext>.</mtext></mrow></math>
+<math><mrow><mn>100</mn><mi mathvariant="normal">%</mi><mo>−</mo><mn>68</mn><mi mathvariant="normal">%</mi><mo>=</mo><mn>32</mn><mi mathvariant="normal">%</mi><mtext>.</mtext></mrow></math>
+<math><mrow><mi>P</mi><mo stretchy="false">(</mo><mi>X</mi><mo>≤</mo><mtext>value</mtext><mo stretchy="false">)</mo><mtext>.</mtext></mrow></math>
+<math><mrow><mn>6.68</mn><mi mathvariant="normal">%</mi><mtext>.</mtext></mrow></math>
+<math><mn>0.1457</mn></math>
+<math><mrow><mi>Z</mi><mo>=</mo><mfrac><mrow><mtext>data value </mtext><mo>−</mo><mtext> mean</mtext></mrow><mtext>standard deviation</mtext></mfrac></mrow></math>
+<math><mtable displaystyle="true" columnspacing="1em" rowspacing="3pt" minlabelspacing=".8em"><mtr><mtd><mrow><mtext>Point estimate </mtext><mo>±</mo><mn>1.96</mn><mo>×</mo><mi>S</mi><mi>E</mi></mrow></mtd></mtr><mtr><mtd><mrow><mn>54.5</mn><mo>±</mo><mn>1.96</mn><mo stretchy="false">(</mo><mn>1.75</mn><mo stretchy="false">)</mo></mrow></mtd></mtr></mtable></math>
+<math><mrow><mn>54.5</mn><mo>+</mo><mn>1.96</mn><mo stretchy="false">(</mo><mn>1.75</mn><mo stretchy="false">)</mo><mo>=</mo><mn>57.93</mn><mtext> inches</mtext><mtext>.</mtext></mrow></math>
+<math><mrow><mn>1.96</mn><mo>×</mo><mtext>SE</mtext></mrow></math>
+<math><mrow><mn>1.96</mn><mo stretchy="false">(</mo><mn>1.75</mn><mo stretchy="false">)</mo><mo>=</mo><mn>3.43</mn><mtext> inches</mtext><mtext>.</mtext></mrow></math>
+<math><mi>X</mi></math>
+<math><mrow><mi>P</mi><mo stretchy="false">(</mo><mi>X</mi><mo>≤</mo><mn>82</mn><mo stretchy="false">)</mo><mtext>.</mtext></mrow></math>
+<math><mrow><mi>P</mi><mo stretchy="false">(</mo><mn>76</mn><mo>≤</mo><mi>X</mi><mo>≤</mo><mn>90</mn><mo stretchy="false">)</mo><mtext>.</mtext></mrow></math>
+<math><mrow><mi>P</mi><mo stretchy="false">(</mo><mi>X</mi><mo>≥</mo><mn>8</mn><mo stretchy="false">)</mo><mtext>.</mtext></mrow></math>
+<math><mrow><mn>897934</mn><mo>/</mo><mn>41</mn><mo>=</mo><mn>21900.82927</mn><mtext>.</mtext></mrow></math>
+<math><mrow><mn>162</mn><mo>,</mo><mn>310</mn><mo>/</mo><mn>21</mn><mo>,</mo><mn>900.82927</mn></mrow></math>
+<math><mrow><msqrt><mo stretchy="false">(</mo><mn>2</mn><mo stretchy="false">(</mo><mn>2</mn><mo>+</mo><mn>1</mn><mo stretchy="false">)</mo></msqrt><mo>=</mo><msqrt><mn>2</mn><mo stretchy="false">(</mo><mn>3</mn><mo stretchy="false">)</mo></msqrt><mo>≈</mo><mn>2.449</mn></mrow></math>
+<math><mrow><msqrt><mo stretchy="false">(</mo><mn>3</mn><mo stretchy="false">(</mo><mn>3</mn><mo>+</mo><mn>1</mn><mo stretchy="false">)</mo></msqrt><mo>=</mo><msqrt><mn>3</mn><mo stretchy="false">(</mo><mn>4</mn><mo stretchy="false">)</mo></msqrt><mo>≈</mo><mn>3.464</mn></mrow></math>
+<math><mrow><msqrt><mo stretchy="false">(</mo><mn>4</mn><mo stretchy="false">(</mo><mn>4</mn><mo>+</mo><mn>1</mn><mo stretchy="false">)</mo></msqrt><mo>=</mo><msqrt><mn>4</mn><mo stretchy="false">(</mo><mn>5</mn><mo stretchy="false">)</mo></msqrt><mo>≈</mo><mn>4.472</mn></mrow></math>
+<math><mrow><mi>n</mi><mo>+</mo><mn>1</mn><mtext>.</mtext></mrow></math>
+<math><mrow><msqrt><mn>9</mn><mo stretchy="false">(</mo><mn>10</mn><mo stretchy="false">)</mo></msqrt><mo>≈</mo><mn>9.49</mn></mrow></math>
+<math><mrow><msqrt><mn>3</mn><mo stretchy="false">(</mo><mn>4</mn><mo stretchy="false">)</mo></msqrt><mo>≈</mo><mn>3.46</mn></mrow></math>
+<math><mrow><msqrt><mn>11</mn><mo stretchy="false">(</mo><mn>12</mn><mo stretchy="false">)</mo></msqrt><mo>≈</mo><mn>11.49</mn></mrow></math>
+<math><mrow><mo>≈</mo><mn>5.48</mn></mrow></math>
+<math><mrow><mo>≈</mo><mn>44.50</mn></mrow></math>
+<math><mrow><mo>≈</mo><mn>9.49</mn></mrow></math>
+<math><mrow><mo>=</mo><mi mathvariant="normal">$</mi><mn>46</mn><mo>,</mo><mn>300</mn><mo>−</mo><mi mathvariant="normal">$</mi><mn>1</mn><mo>,</mo><mn>400</mn><mo>−</mo><mi mathvariant="normal">$</mi><mn>4</mn><mo>,</mo><mn>000</mn><mo>=</mo><mi mathvariant="normal">$</mi><mn>40</mn><mo>,</mo><mn>900</mn></mrow></math>
+<math><mrow><mo stretchy="false">(</mo><mn>0.05</mn><mo stretchy="false">)</mo><mi mathvariant="normal">$</mi><mn>100</mn><mo>=</mo><mi mathvariant="normal">$</mi><mn>5</mn></mrow></math>
+<math><mrow><mi mathvariant="normal">$</mi><mn>100</mn><mo>+</mo><mi mathvariant="normal">$</mi><mn>5</mn><mo>=</mo><mi mathvariant="normal">$</mi><mn>105</mn></mrow></math>
+<math><mrow><mi>I</mi><mo>=</mo><mi>P</mi><mi>r</mi></mrow></math>
+<math><mrow><mi>I</mi><mo>=</mo><mi>P</mi><mi>r</mi><mi>t</mi></mrow></math>
+<math><mrow><mi>A</mi><mo>=</mo><mi>P</mi><mo>+</mo><mi>I</mi><mtext> or </mtext><mi>A</mi><mo>=</mo><mi>P</mi><mo>+</mo><mi>P</mi><mi>r</mi><mi>t</mi></mrow></math>
+<math><mrow><mfrac><mn>0.04</mn><mn>4</mn></mfrac><mo>=</mo><mn>0.01</mn></mrow></math>
+<math><mrow><mfrac><mn>0.03</mn><mn>12</mn></mfrac><mo>=</mo><mn>0.0025</mn></mrow></math>
+<math><mtable displaystyle="true" columnalign="right left" columnspacing="0em" rowspacing="3pt" minlabelspacing=".8em"><mtr><mtd><mi>P</mi></mtd><mtd><mrow><mi>&lt;mi/&gt;</mi><mo>=</mo><mi mathvariant="normal">$</mi><mn>1000</mn></mrow></mtd></mtr><mtr><mtd><mi>r</mi></mtd><mtd><mrow><mi>&lt;mi/&gt;</mi><mo>=</mo><mn>0.0025</mn></mrow></mtd></mtr><mtr><mtd><mi>I</mi></mtd><mtd><mrow><mi>&lt;mi/&gt;</mi><mo>=</mo><mi mathvariant="normal">$</mi><mn>1000</mn><mo stretchy="false">(</mo><mn>0.0025</mn><mo stretchy="false">)</mo><mo>=</mo><mi mathvariant="normal">$</mi><mn>2.50</mn></mrow></mtd></mtr><mtr><mtd><mi>A</mi></mtd><mtd><mrow><mi>&lt;mi/&gt;</mi><mo>=</mo><mi mathvariant="normal">$</mi><mn>1000</mn><mo>+</mo><mi mathvariant="normal">$</mi><mn>2.50</mn><mo>=</mo><mi mathvariant="normal">$</mi><mn>1002.50</mn></mrow></mtd></mtr></mtable></math>
+<math><mrow><mi>P</mi><mo>=</mo><mi mathvariant="normal">$</mi><mn>1000</mn></mrow></math>
+<math><mrow><msup><mn>2</mn><mtext>nd</mtext></msup><mtext> Month </mtext><mi>A</mi><mo>=</mo><mn>1.0025</mn><mo stretchy="false">(</mo><mn>1.0025</mn><mo stretchy="false">(</mo><mi mathvariant="normal">$</mi><mn>1000</mn><mo stretchy="false">)</mo><mo stretchy="false">)</mo><mo>=</mo><msup><mn>1.0025</mn><mn>2</mn></msup><mo stretchy="false">(</mo><mi mathvariant="normal">$</mi><mn>1000</mn><mo stretchy="false">)</mo></mrow></math>
+<math><mrow><mi mathvariant="normal">$</mi><mn>4849.11</mn><mo>−</mo><mi mathvariant="normal">$</mi><mn>4000</mn><mo>=</mo><mi mathvariant="normal">$</mi><mn>849.11</mn></mrow></math>
+<math><mrow><mfrac><mrow><mi mathvariant="normal">$</mi><mn>849.11</mn></mrow><mn>4849.11</mn></mfrac><mo>=</mo><mn>0.1751</mn><mtext> or </mtext><mn>17.5</mn><mi mathvariant="normal">%</mi></mrow></math>
+<math><mrow><mo stretchy="false">(</mo><mo>−</mo><mn>5</mn><msup><mo stretchy="false">)</mo><mn>2</mn></msup><mo>=</mo><mn>25</mn></mrow></math>
+<math><mtable displaystyle="true" columnspacing="1em" rowspacing="3pt" minlabelspacing=".8em"><mtr><mtd><mrow><mn>25</mn><mo>+</mo><mn>0</mn><mo>+</mo><mn>0</mn><mo>+</mo><mn>0</mn><mo>+</mo><mn>0</mn><mo>+</mo><mn>0</mn><mo>+</mo><mn>0</mn><mo>+</mo><mn>0</mn><mo>+</mo><mn>0</mn><mo>+</mo><mn>25</mn><mo>=</mo><mn>50</mn></mrow></mtd></mtr></mtable></math>
+<math><mrow><msub><mi>S</mi><mi>A</mi></msub><mo>=</mo><mn>0</mn></mrow></math>
+<math><mrow><msub><mi>S</mi><mi>B</mi></msub><mo>=</mo><mn>5.27</mn></mrow></math>
+<math><mrow><mi>n</mi><mo>−</mo><mn>1</mn><mtext>:</mtext></mrow></math>
+<math><mrow><mi>s</mi><mo>=</mo><msqrt><mfrac><mtext>Sum of the squared deviations from the mean</mtext><mrow><mi>n</mi><mo>−</mo><mn>1</mn></mrow></mfrac></msqrt></mrow></math>
+<math><mrow><mo stretchy="false">(</mo><mo>−</mo><mn>0.39</mn><msup><mo stretchy="false">)</mo><mn>2</mn></msup><mo>=</mo><mn>1521</mn></mrow></math>
+<math><mrow><mn>3.99</mn><mo>−</mo><mn>3.68</mn><mo>=</mo><mn>0.31</mn></mrow></math>
+<math><mtable displaystyle="true" columnspacing="1em" rowspacing="3pt" minlabelspacing=".8em"><mtr><mtd><mrow><mi>s</mi><mo>=</mo><msqrt><mfrac><mn>0.2733</mn><mn>4</mn></mfrac></msqrt><mo>≈</mo><mi mathvariant="normal">$</mi><mn>0.2614</mn></mrow></mtd></mtr></mtable></math>
+<math><mrow><mo stretchy="false">(</mo><mi>n</mi><mo stretchy="false">)</mo><mtext>,</mtext></mrow></math>
+<math><mtable displaystyle="true" columnspacing="1em" rowspacing="3pt" minlabelspacing=".8em"><mtr><mtd><mrow><mover><mover><mrow><mn>59</mn><mo>,</mo><mn>60</mn><mo>,</mo><mover><munder><mrow><mn>61</mn><mo>,</mo><mn>63</mn><mo>,</mo></mrow><mo>⏟</mo></munder><mrow data-mjx-texclass="ORD"><mi>Q</mi><mn>1</mn><mo>=</mo><mfrac><mrow><mn>61</mn><mo>+</mo><mn>63</mn></mrow><mn>2</mn></mfrac><mo>=</mo><mn>62</mn></mrow></mover><mn>64</mn><mo>,</mo><mn>64</mn><mo>,</mo></mrow><mo>⏞</mo></mover><mtext>Lower Half</mtext></mover><mover><mover><mn>66</mn><mo>⏞</mo></mover><mtext>Median(Ignore)</mtext></mover><mover><mover><mrow><mn>66</mn><mo>,</mo><mn>67</mn><mo>,</mo><mover><munder><mrow><mn>68</mn><mo>,</mo><mn>69</mn><mo>,</mo></mrow><mo>⏟</mo></munder><mrow data-mjx-texclass="ORD"><mi>Q</mi><mn>3</mn><mo>=</mo><mfrac><mrow><mn>68</mn><mo>+</mo><mn>69</mn></mrow><mn>2</mn></mfrac><mo>=</mo><mn>68.5</mn></mrow></mover><mn>70</mn><mo>,</mo><mn>72</mn></mrow><mo>⏞</mo></mover><mtext>Upper Half</mtext></mover></mrow></mtd></mtr></mtable></math>
+<math><mrow><mo>=</mo><msub><mi>Q</mi><mn>1</mn></msub><mo>=</mo><mn>62</mn></mrow></math>
+<math><mtable displaystyle="true" columnspacing="1em" rowspacing="3pt" minlabelspacing=".8em"><mtr><mtd><mrow><mi>I</mi><mi>Q</mi><mi>R</mi><mo>=</mo><mn>68.5</mn><mo>−</mo><mn>62</mn><mo>=</mo><mn>6.5</mn><mtext> inches</mtext></mrow></mtd></mtr></mtable></math>
+<math><mtable displaystyle="true" columnspacing="1em" rowspacing="3pt" minlabelspacing=".8em"><mtr><mtd><mrow><msub><mi>Z</mi><mtext>Orange</mtext></msub><mo>=</mo><mfrac><mrow><mn>4.2</mn><mo>−</mo><mn>5.8</mn></mrow><mn>1.2</mn></mfrac><mo>=</mo><mo>−</mo><mn>1.33</mn><mtext> standard deviations</mtext></mrow></mtd></mtr><mtr><mtd><mrow><msub><mi>Z</mi><mtext>Apple</mtext></msub><mo>=</mo><mfrac><mrow><mn>3.5</mn><mo>−</mo><mn>4.2</mn></mrow><mn>0.6</mn></mfrac><mo>=</mo><mo>−</mo><mn>1.17</mn><mtext> standard deviations</mtext></mrow></mtd></mtr></mtable></math>
+<math><mrow><mi>P</mi><mo stretchy="false">(</mo><mtext>roll a 6 then roll a 6</mtext><mo stretchy="false">)</mo><mo>=</mo><mfrac><mn>5</mn><mn>6</mn></mfrac><mo>⋅</mo><mfrac><mn>1</mn><mn>6</mn></mfrac><mo>=</mo><mfrac><mn>5</mn><mn>36</mn></mfrac></mrow></math>
+<math><mtable displaystyle="true" columnspacing="1em" rowspacing="3pt" minlabelspacing=".8em"><mtr><mtd><mrow><mtext>Expected winnings</mtext><mo>=</mo><mi mathvariant="normal">$</mi><mn>10</mn><mo stretchy="false">(</mo><mfrac><mn>1</mn><mn>6</mn></mfrac><mo stretchy="false">)</mo><mo>+</mo><mi mathvariant="normal">$</mi><mn>3</mn><mo stretchy="false">(</mo><mfrac><mn>5</mn><mn>36</mn></mfrac><mo stretchy="false">)</mo><mo>+</mo><mi mathvariant="normal">$</mi><mn>0</mn><mo stretchy="false">(</mo><mfrac><mn>25</mn><mn>36</mn></mfrac><mo stretchy="false">)</mo><mo>=</mo><mi mathvariant="normal">$</mi><mn>2.08</mn></mrow></mtd></mtr></mtable></math>
+<math><mfrac bevelled="true"><mn>1</mn><mn>1833</mn></mfrac></math>
+<math><mfrac bevelled="true"><mn>1</mn><mn>1667</mn></mfrac></math>
+<math><mrow><mn>16</mn><mo>÷</mo><mn>14</mn><mo>≈</mo><mn>1.14</mn></mrow></math>
+<math><mrow><mo stretchy="false">(</mo><mn>15</mn><mo stretchy="false">)</mo><mo stretchy="false">(</mo><mn>6</mn><mo stretchy="false">)</mo><mo>=</mo><mn>90</mn><mtext>.</mtext></mrow></math>
+<math><mrow><mo>=</mo><mfrac><mrow><mn>6</mn><mo>+</mo><mn>7</mn></mrow><mn>2</mn></mfrac><mo>=</mo><mn>6.5</mn></mrow></math>
+<math><mtable displaystyle="true" columnspacing="1em" rowspacing="3pt" minlabelspacing=".8em"><mtr><mtd><mrow><mover><mover><mrow><mn>3.29</mn><mo>,</mo><mn>3.59</mn></mrow><mo>⏞</mo></mover><mtext>Lower Half</mtext></mover><mover><mover><mn>3.75</mn><mo>⏞</mo></mover><mtext>Median</mtext></mover><mover><mover><mrow><mn>3.79</mn><mo>,</mo><mn>3.99</mn></mrow><mo>⏞</mo></mover><mtext>Upper Half</mtext></mover></mrow></mtd></mtr></mtable></math>
+<math><mrow><mo>=</mo><mi mathvariant="normal">$</mi><mn>67</mn><mo>,</mo><mn>160</mn><mtext>,</mtext></mrow></math>
+<math><mrow><mo>=</mo><mi mathvariant="normal">$</mi><mn>53</mn><mo>,</mo><mn>500</mn><mtext>,</mtext></mrow></math>
