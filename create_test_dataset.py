@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-Script to create a test dataset by randomly sampling ~30 elements from each source.
-Ensures alignment across Nemeth, UEB, and MathML versions.
+Script to create a test dataset by randomly sampling elements from each source.
+Uses only high school sources and keeps alignment across Nemeth, UEB, and MathML versions.
 """
 
 import random
@@ -9,9 +9,9 @@ from pathlib import Path
 
 
 def get_source_files(base_path):
-    """Get all deduplicated source files from a directory."""
+    """Get all deduplicated source files from the highschool directory."""
     sources = []
-    for category in ['college', 'highschool']:
+    for category in ['highschool']:
         category_path = base_path / category
         if category_path.exists():
             for file in category_path.glob('*-no-dups.*'):
@@ -25,7 +25,7 @@ def read_file_lines(file_path):
         return f.readlines()
 
 
-def sample_aligned_data(nemeth_file, ueb_file, mathml_file, sample_size=30):
+def sample_aligned_data(nemeth_file, ueb_file, mathml_file, sample_size):
     """
     Sample aligned data from all three file types.
     Returns the sampled lines from each file, maintaining alignment.
@@ -55,9 +55,11 @@ def sample_aligned_data(nemeth_file, ueb_file, mathml_file, sample_size=30):
     return nemeth_samples, ueb_samples, mathml_samples
 
 
-def write_samples(output_dir, prefix, source_name, extension, lines):
+def write_samples(output_dir, subfolder, source_name, extension, lines):
     """Write sampled lines to output file."""
-    output_file = output_dir / f"{prefix}_{source_name}{extension}"
+    output_subdir = output_dir / subfolder
+    output_subdir.mkdir(parents=True, exist_ok=True)
+    output_file = output_subdir / f"{source_name}{extension}"
     with open(output_file, 'w', encoding='utf-8') as f:
         f.writelines(lines)
 
@@ -83,7 +85,6 @@ def main():
     sources = get_source_files(nemeth_base)
 
     print(f"Found {len(sources)} source files")
-    print(f"Sampling ~30 elements from each source...")
 
     total_nemeth = 0
     total_ueb = 0
@@ -108,7 +109,7 @@ def main():
 
         # Sample aligned data
         nemeth_samples, ueb_samples, mathml_samples = sample_aligned_data(
-            nemeth_file, ueb_file, mathml_file, sample_size=30
+            nemeth_file, ueb_file, mathml_file, sample_size=110
         )
 
         if not nemeth_samples:
