@@ -1,1 +1,12 @@
+/.ipynb_checkpoints/
+
+SimpleSpeakData/*arXiv*
+SimpleSpeakData/*-savings.txt
+SimpleSpeakData/*-simple.txt
+SimpleSpeakData/*.csv
+SimpleSpeakData/plot*
+SimpleSpeakData/*.urls
+OldResults
+
+
 /testdata/

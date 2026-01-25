@@ -29,7 +29,7 @@ def compare_files(file_paths: List[str]) -> None:
             for line1, line2 in zip(f1, f2):
                 total_lines += 1
                 try:
-                    if areCanonicallyEqual(line1, line2):
+                    if areCanonicallyEqual(line1, line2).isEqual:
                         match_count += 1
                     else:
                         print(f"Line {total_lines}: Different")

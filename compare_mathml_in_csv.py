@@ -14,17 +14,18 @@ Output:
 import pandas as pd
 import sys
 import os
+from typing import NamedTuple
 import libmathcat_py as libmathcat
 from bs4 import BeautifulSoup   # pip install BeautifulSoup4
 sys.stdout.reconfigure(encoding='utf-8')  # in case print statements are used for debugging
 
 
 # Attributes to ignore during comparison (might need a few more)
-IGNORE_ATTRS = ['id', 'displaystyle', 'scriptlevel', 'xmlns',
+IGNORE_ATTRS = ['id', 'class', 'displaystyle', 'scriptlevel', 'xmlns',
                 'data-id-added', 'data-added', 'data-changed',
                 'data-previous-space-width', 'data-following-space-width',
                 'data-empty-in-2d', 'data-width', 'data-function-guess',
-                'stretchy',
+                'stretchy', 'accent', 'accentover',
                 'columnspacing', 'rowspacing', 'rowlines', 'columnlines', 'minlabelspacing',
                 'columnalign', 'rowalign', 'equalcolumns', 'equalrows', 'align',
                 'mathcolor', 'mathbackground', 'mathsize', 'mathvariant']
@@ -53,7 +54,8 @@ def setMathMLForMathCAT(mathml: str):
     """
     try:
         canonicalMathML = libmathcat.SetMathML(mathml)
-        return strip_mathml_attributes(canonicalMathML, IGNORE_ATTRS)
+        stripped = strip_mathml_attributes(canonicalMathML, IGNORE_ATTRS)
+        return stripped.replace("<mprescripts></mprescripts>", "<mprescripts/>")
     except Exception as e:
         raise e
 
@@ -83,31 +85,31 @@ def strip_mathml_attributes(mathml_string: str, attributes_to_remove: list[str])
     return " ".join(str(soup).split())
 
 
-failure_count: int = 0  # Global counter for match failures
+class CanonicalResults(NamedTuple):
+    isEqual: bool
+    canonicalOriginal: str
+    canonicalComputed: str
 
 
-def areCanonicallyEqual(original: str, computed: str, error_text="") -> bool:
+def areCanonicallyEqual(original: str, computed: str, error_text="") -> CanonicalResults:
     """
     Placeholder for your canonical comparison logic.
     Returns True if the MathML strings are equivalent, False otherwise.
     """
-    global failure_count
     if type(computed) is not str:
-        failure_count += 1
-        return False
+        return CanonicalResults(False, original, computed)
 
     # Remove these after fixing the input data
     cannonicalOriginal: str = libmathcat.SetMathML(original)
-    cannonicalOriginal = strip_mathml_attributes(cannonicalOriginal, IGNORE_ATTRS).replace('<mtext', '<mi').replace('</mtext>', '</mi>').strip()
+    cannonicalOriginal = (strip_mathml_attributes(cannonicalOriginal, IGNORE_ATTRS)
+                          .replace('<mtext', '<mi')
+                          .replace('</mtext>', '</mi>').strip())
     canonicalComputed: str = libmathcat.SetMathML(computed)
-    canonicalComputed = strip_mathml_attributes(canonicalComputed, IGNORE_ATTRS).replace('<mtext', '<mi').replace('</mtext>', '</mi>').strip()
+    canonicalComputed = (strip_mathml_attributes(canonicalComputed, IGNORE_ATTRS)
+                         .replace('<mtext', '<mi')
+                         .replace('</mtext>', '</mi>').strip())
     result = cannonicalOriginal == canonicalComputed
-    if not result:
-        failure_count += 1
-        print(f"\n{error_text}:")
-        print(f"Original: {cannonicalOriginal}")
-        print(f"Computed: {canonicalComputed}")
-    return result
+    return CanonicalResults(result, cannonicalOriginal, canonicalComputed)
 
 
 def process_mathml_csv(input_file: str) -> None:
@@ -122,6 +124,7 @@ def process_mathml_csv(input_file: str) -> None:
 
     # initial MathCAT
     setMathCATPreferences({})
+    failure_count = 0
 
     # Load the CSV
     try:
@@ -145,10 +148,15 @@ def process_mathml_csv(input_file: str) -> None:
     # results is a pandas Series of booleans
     for i in range(len(df)):
         try:
-            df.at[i, 'is_equal'] = areCanonicallyEqual(df.at[i, 'ground_truth_mathml'], df.at[i, 'predicted_mathml'], f"Not the same: row {i+1}")
+            isEqual: bool = areCanonicallyEqual(df.at[i, 'ground_truth_mathml'], df.at[i, 'predicted_mathml'],
+                                                f"Not the same: row {i+1}").isEqual
+            df.at[i, 'is_equal'] = "✓" if isEqual else "✗"
+            if not isEqual:
+                failure_count += 1
         except Exception as e:
             print(f"Error comparing row {i}: {e}")
             df.at[i, 'is_equal'] = False
+            failure_count += 1
 
     # Generate output filename
     base: str
