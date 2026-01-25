@@ -54,7 +54,8 @@ def setMathMLForMathCAT(mathml: str):
     """
     try:
         canonicalMathML = libmathcat.SetMathML(mathml)
-        return strip_mathml_attributes(canonicalMathML, IGNORE_ATTRS)
+        stripped = strip_mathml_attributes(canonicalMathML, IGNORE_ATTRS)
+        return stripped.replace("<mprescripts></mprescripts>", "<mprescripts/>")
     except Exception as e:
         raise e
 
