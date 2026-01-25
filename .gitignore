@@ -9,4 +9,5 @@ SimpleSpeakData/*.urls
 OldResults
 
 
-/testdata/
+/test_data/
+/example_data/

@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """
-Script to create a test dataset by randomly sampling elements from each source.
-Uses only high school sources and keeps alignment across Nemeth, UEB, and MathML versions.
+Script to create test and example datasets by randomly sampling elements each
+from high school sources, keeping alignment across Nemeth, UEB, and MathML versions.
+The test and example datasets are guaranteed to be disjoint per source file.
 """
 
 import random
@@ -11,7 +12,7 @@ from pathlib import Path
 def get_source_files(base_path):
     """Get all deduplicated source files from the highschool directory."""
     sources = []
-    for category in ['highschool']:
+    for category in ['highschool']: # could also add "college" if desired
         category_path = base_path / category
         if category_path.exists():
             for file in category_path.glob('*-no-dups.*'):
@@ -20,7 +21,6 @@ def get_source_files(base_path):
 
 
 def read_file_lines(file_path):
-    """Read all lines from a file."""
     with open(file_path, 'r', encoding='utf-8') as f:
         return f.readlines()
 
@@ -64,18 +64,52 @@ def write_samples(output_dir, subfolder, source_name, extension, lines):
         f.writelines(lines)
 
 
+def split_aligned_data(nemeth_file, ueb_file, mathml_file, sample_size):
+    """
+    Sample two disjoint aligned sets from all three file types.
+    Returns (test_samples, example_samples) for each file type.
+    """
+    nemeth_lines = read_file_lines(nemeth_file)
+    ueb_lines = read_file_lines(ueb_file)
+    mathml_lines = read_file_lines(mathml_file)
+
+    min_lines = min(len(nemeth_lines), len(ueb_lines), len(mathml_lines))
+    if min_lines == 0:
+        return ([], [], []), ([], [], [])
+
+    test_size = min(sample_size, min_lines)
+    remaining = min_lines - test_size
+    example_size = min(sample_size, remaining)
+
+    all_indices = list(range(min_lines))
+    test_indices = set(random.sample(all_indices, test_size))
+    remaining_indices = [i for i in all_indices if i not in test_indices]
+    example_indices = set(random.sample(remaining_indices, example_size))
+
+    test_indices_sorted = sorted(test_indices)
+    example_indices_sorted = sorted(example_indices)
+
+    test_nemeth = [nemeth_lines[i] for i in test_indices_sorted]
+    test_ueb = [ueb_lines[i] for i in test_indices_sorted]
+    test_mathml = [mathml_lines[i] for i in test_indices_sorted]
+
+    example_nemeth = [nemeth_lines[i] for i in example_indices_sorted]
+    example_ueb = [ueb_lines[i] for i in example_indices_sorted]
+    example_mathml = [mathml_lines[i] for i in example_indices_sorted]
+
+    return (test_nemeth, test_ueb, test_mathml), (example_nemeth, example_ueb, example_mathml)
+
+
 def main():
-    # Set random seed for reproducibility
     random.seed(42)
 
-    # Define paths
     project_root = Path(__file__).parent
     nemeth_base = project_root / 'BrailleData' / 'Braille' / 'Nemeth'
     ueb_base = project_root / 'BrailleData' / 'Braille' / 'UEB'
     mathml_base = project_root / 'SimpleSpeakData'
-    output_dir = project_root / 'testdata'
+    test_output_dir = project_root / 'test_data'
+    example_output_dir = project_root / 'example_data'
 
-    # Files to exclude from the dataset
     excluded_sources = {
         'Adventures of Small Number__58__ A collection of short stories',
         'The Story of 8',
@@ -86,56 +120,55 @@ def main():
 
     print(f"Found {len(sources)} source files")
 
-    total_nemeth = 0
-    total_ueb = 0
-    total_mathml = 0
+    total_test_nemeth = 0
+    total_test_ueb = 0
+    total_test_mathml = 0
+    total_example_nemeth = 0
+    total_example_ueb = 0
+    total_example_mathml = 0
     processed = 0
 
     for category, source_name, _ in sources:
-        # Skip excluded sources
         if source_name in excluded_sources:
             print(f"Skipping {source_name}: excluded")
             continue
 
-        # Construct file paths
         nemeth_file = nemeth_base / category / f"{source_name}-no-dups.brls"
         ueb_file = ueb_base / category / f"{source_name}-no-dups.brls"
         mathml_file = mathml_base / category / f"{source_name}-no-dups.mmls"
 
-        # Check if all three files exist
-        if not (nemeth_file.exists() and ueb_file.exists() and mathml_file.exists()):
-            print(f"Skipping {source_name}: missing files")
-            continue
-
-        # Sample aligned data
-        nemeth_samples, ueb_samples, mathml_samples = sample_aligned_data(
+        # Sample disjoint aligned data
+        (test_nemeth, test_ueb, test_mathml), (ex_nemeth, ex_ueb, ex_mathml) = split_aligned_data(
             nemeth_file, ueb_file, mathml_file, sample_size=110
         )
 
-        if not nemeth_samples:
-            print(f"Skipping {source_name}: empty file")
-            continue
+        write_samples(test_output_dir, 'nemeth', source_name, '.brls', test_nemeth)
+        write_samples(test_output_dir, 'ueb', source_name, '.brls', test_ueb)
+        write_samples(test_output_dir, 'mathml', source_name, '.mmls', test_mathml)
 
-        # Write samples to output directory
-        write_samples(output_dir, 'nemeth', source_name, '.brls', nemeth_samples)
-        write_samples(output_dir, 'ueb', source_name, '.brls', ueb_samples)
-        write_samples(output_dir, 'mathml', source_name, '.mmls', mathml_samples)
+        write_samples(example_output_dir, 'nemeth', source_name, '.brls', ex_nemeth)
+        write_samples(example_output_dir, 'ueb', source_name, '.brls', ex_ueb)
+        write_samples(example_output_dir, 'mathml', source_name, '.mmls', ex_mathml)
 
-        total_nemeth += len(nemeth_samples)
-        total_ueb += len(ueb_samples)
-        total_mathml += len(mathml_samples)
+        total_test_nemeth += len(test_nemeth)
+        total_test_ueb += len(test_ueb)
+        total_test_mathml += len(test_mathml)
+        total_example_nemeth += len(ex_nemeth)
+        total_example_ueb += len(ex_ueb)
+        total_example_mathml += len(ex_mathml)
         processed += 1
-
-        if processed % 10 == 0:
-            print(f"Processed {processed} sources...")
 
     print(f"\nCompleted!")
     print(f"Processed {processed} sources")
     print(f"Total samples:")
-    print(f"  - Nemeth: {total_nemeth}")
-    print(f"  - UEB: {total_ueb}")
-    print(f"  - MathML: {total_mathml}")
-    print(f"\nTest dataset saved to: {output_dir}")
+    print(f"  - Test Nemeth: {total_test_nemeth}")
+    print(f"  - Test UEB: {total_test_ueb}")
+    print(f"  - Test MathML: {total_test_mathml}")
+    print(f"  - Example Nemeth: {total_example_nemeth}")
+    print(f"  - Example UEB: {total_example_ueb}")
+    print(f"  - Example MathML: {total_example_mathml}")
+    print(f"\nTest dataset saved to: {test_output_dir}")
+    print(f"Example dataset saved to: {example_output_dir}")
 
 
 if __name__ == '__main__':
