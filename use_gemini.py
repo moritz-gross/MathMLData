@@ -474,7 +474,7 @@ def run_conversion(
         f"example_data/mathml.mmls"
     )
     truncated_additional_examples = additional_examples.splitlines(keepends=True)
-    additional_examples = "".join(truncated_additional_examples[:500])
+    additional_examples = "".join(truncated_additional_examples[:1000])
     examples += "\n" + additional_examples
 
     test_mathml_dir = "test_data/MathML"
