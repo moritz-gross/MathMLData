@@ -1,6 +1,7 @@
 import time
 import logging
 import re
+import argparse
 from typing import Any, NamedTuple  # 'Any' is still imported from typing
 from google import genai
 from google.genai import types
@@ -156,6 +157,12 @@ def generate_with_retry(
             response_stream = client.models.generate_content_stream(
                 model=model,
                 config=types.GenerateContentConfig(
+                    safety_settings=[
+                        types.SafetySetting(
+                            category="HARM_CATEGORY_HARASSMENT",
+                            threshold="BLOCK_NONE",
+                        )
+                    ],
                     system_instruction=instructions,
                     temperature=0.1,
                 ),
@@ -297,7 +304,7 @@ def write_results_to_file(input: list[str],
                 for line in config.instructions.split('\n'):
                     f.write(f"# {line}\n")
             f.write("#\n")
-        
+
         match_count = 0
         f.write(f"# {len(computed_output)} items. "
                 f"Usage info: {usage_info}ms, "
@@ -336,19 +343,50 @@ def write_results_to_file(input: list[str],
               f"Results written to {output_file}. ")
 
 
+def readMatchingFiles(braille_path: str, mathml_path: str) -> tuple[list[str], list[str]]:
+    """
+    Reads lines from two files or directories and returns tuple of (braille_lines, mathml_lines).
+    If directories are provided, matches files by base name (without extension) and combines all pairs.
+    """
+    braille_lines = []
+    mathml_lines = []
+
+    # Check if paths are directories
+    if os.path.isdir(braille_path) and os.path.isdir(mathml_path):
+        # Iterate through braille files and read matching pairs directly
+        for filename in os.listdir(braille_path):
+            if filename.endswith('.brls'):
+                base_name = os.path.splitext(filename)[0]
+                braille_file = os.path.join(braille_path, filename)
+                mathml_file = os.path.join(mathml_path, base_name + '.mmls')
+
+                # If matching mathml file exists, read both files
+                if os.path.exists(mathml_file):
+                    with open(braille_file, "r", encoding="utf-8") as f:
+                        braille_lines.extend(f.read().splitlines())
+                    with open(mathml_file, "r", encoding="utf-8") as f:
+                        mathml_lines.extend(f.read().splitlines())
+    else:
+        # Handle as files (original behavior)
+        with open(braille_path, "r", encoding="utf-8") as f:
+            braille_lines = f.read().splitlines()
+        with open(mathml_path, "r", encoding="utf-8") as f:
+            mathml_lines = f.read().splitlines()
+
+    return braille_lines, mathml_lines
+
+
 def generateExamples(braille_path, mathml_path) -> str:
     """
-    Zips lines from two files and returns a string of the from "braille | mathml\n".
+    Zips lines from two files or directories and returns a string of the form "braille | mathml\n".
+    If directories are provided, matches files by base name (without extension) and combines all pairs.
     """
     try:
-        with open(braille_path, "r", encoding="utf-8") as f:
-            braille = f.read().splitlines()
-        with open(mathml_path, "r", encoding="utf-8") as f:
-            mathml = f.read().splitlines()
+        braille_lines, mathml_lines = readMatchingFiles(braille_path, mathml_path)
 
-        # Zip and print
+        # Zip and format
         result = ""
-        for brl, mml in zip(braille, mathml):
+        for brl, mml in zip(braille_lines, mathml_lines):
             # .strip() removes the trailing newline character for cleaner output
             quoted_mml = mml.strip().replace('"', '\\"')
             result += f'"{brl.strip()} | {quoted_mml}\\n"\n'
@@ -357,44 +395,73 @@ def generateExamples(braille_path, mathml_path) -> str:
 
     except FileNotFoundError as e:
         print(f"Error: Could not find file - {e.filename}")
+        return ""
     except Exception as e:
         print(f"An unexpected error occurred: {e}")
+        return ""
 
 
-def main():
-    braille_code = "Nemeth"
-    # braille_code = "UEB"
-    gen_mathml_instructions_prolog = (
-        f"You are an expert Braille translator specializing in {braille_code} braille. "
-        "The user will provide a python list of strings, "
-        f"where each string is composed of Unicode {braille_code} Braille characters.  "
-        "Here are two examples: '⠠⠑⠀⠨⠅⠀⠍⠉⠘⠆' and  '⠎⠊⠝⠀⠷⠨⠹⠾'. "
-        "Your task is to translate each exact Braille sequence of characters into valid MathML code. "
-        "For each braille input, output ONLY the raw MathML string starting with <math> and ending with </math>. "
-        "Every element in the MathML must be properly closed and nested. "
-        "Do not include markdown formatting, explanations, or any other text. "
-        "Do not include any newlines or carriage returns. "
-        "Add '|next-item|' between each MathML output. "
-        "Below are some examples of braille/MathML pairs separated by '|' that should be considered the ground truth:\n"
-    )
+def getInstructionsProlog(gen_braille: bool, braille_code: str) -> str:
+    """
+    Returns the instructions prolog based on whether generating braille or MathML.
 
-    gen_braille_instructions_prolog = (
-        f"You are an expert Braille translator specializing in {braille_code} braille. "
-        "The user will provide a python list of strings, "
-        "where each string is composed of represents math encoded in MathML "
-        "(e.g., <math><mi>f</mi><mrow><mo>(</mo><mfrac><mn>1</mn><mn>2</mn></mfrac><mo>)</mo></mrow></math>). "
-        f"Your task is to translate each MathML expression into valid {braille_code} braille "
-        "using only Unicode braille characters. "
-        "For each MathML input, output ONLY the raw Unicode braille characters. (e.g., '⠋⠷⠹⠂⠌⠆⠼⠾')"
-        "It is important to pay attention to generating Unicode braille spaces when needed in the braille. "
-        "It is also important to pay attention when to generate "
-        f"{'the number sign indicator ⠼ and the English letter indicator' if braille_code == 'Nemeth' else
-           'grade 1 indicators ⠰, grade 1 word indicators ⠰⠰, and grade 1 passage indicators ⠰⠰⠰ when appropriate. '
-           'These are very common at the start of the translation.'}"
-        "Do not include markdown formatting, explanations, or any other text."
-        "Add '|next-item|' between each braille output. "
-        "Below are some examples of braille/MathML pairs separated by '|' that should be considered the ground truth:\n"
-    )
+    Args:
+        gen_braille: If True, generates braille from MathML. If False, generates MathML from braille.
+        braille_code: The braille code to use (e.g., "Nemeth", "UEB")
+
+    Returns:
+        The instructions prolog string
+    """
+    if gen_braille:
+        return (
+            f"You are an expert Braille translator specializing in {braille_code} braille. "
+            "The user will provide a python list of strings, "
+            "where each string is composed of represents math encoded in MathML "
+            "(e.g., <math><mi>f</mi><mrow><mo>(</mo><mfrac><mn>1</mn><mn>2</mn></mfrac><mo>)</mo></mrow></math>). "
+            f"Your task is to translate each MathML expression into valid {braille_code} braille "
+            "using only Unicode braille characters. "
+            "For each MathML input, output ONLY the raw Unicode braille characters. (e.g., '⠋⠷⠹⠂⠌⠆⠼⠾')"
+            "It is important to pay attention to generating Unicode braille spaces when needed in the braille. "
+            "It is also important to pay attention when to generate "
+            f"{'the number sign indicator ⠼ and the English letter indicator' if braille_code == 'Nemeth' else
+               'grade 1 indicators ⠰, grade 1 word indicators ⠰⠰, and grade 1 passage indicators ⠰⠰⠰ when appropriate. '
+               'These are very common at the start of the translation.'}"
+            "Do not include markdown formatting, explanations, or any other text."
+            "Add '|next-item|' between each braille output. "
+            "Below are some examples of braille/MathML pairs separated by '|' that should be considered the ground truth:\n"
+        )
+    else:
+        return (
+            f"You are an expert Braille translator specializing in {braille_code} braille. "
+            "The user will provide a python list of strings, "
+            f"where each string is composed of Unicode {braille_code} Braille characters.  "
+            "Here are two examples: '⠠⠑⠀⠨⠅⠀⠍⠉⠘⠆' and  '⠎⠊⠝⠀⠷⠨⠹⠾'. "
+            "Your task is to translate each exact Braille sequence of characters into valid MathML code. "
+            "For each braille input, output ONLY the raw MathML string starting with <math> and ending with </math>. "
+            "Every element in the MathML must be properly closed and nested. "
+            "Do not include markdown formatting, explanations, or any other text. "
+            "Do not include any newlines or carriage returns. "
+            "Add '|next-item|' between each MathML output. "
+            "Below are some examples of braille/MathML pairs separated by '|' "
+            "that should be considered the ground truth:\n"
+        )
+
+
+def run_conversion(
+    gen_braille: bool,
+    braille_code: str,
+    chunk_size: int | None = None
+) -> None:
+    """
+    Run the conversion process to generate braille or MathML.
+
+    Args:
+        gen_braille: If True, generates braille from MathML. If False, generates MathML from braille.
+        braille_code: The braille code to use (e.g., "Nemeth", "UEB")
+        chunk_size: Number of items to process (defaults to all items if None)
+    """
+    # Get instructions prolog based on output type
+    instructions_prolog = getInstructionsProlog(gen_braille, braille_code)
 
     # File paths for examples
     example_braille_file = f"RustTestData/{braille_code}.brls"
@@ -402,43 +469,42 @@ def main():
     # example_mathml_file = f"RustTestData/{braille_code}-cnclz.mmls"
     examples = generateExamples(example_braille_file, example_mathml_file)
 
-    # File paths for input
-    input_braille_file = f"BrailleData/Braille/{braille_code}/highschool/Statistics-no-dups.brls"
-    input_mathml_file = "SimpleSpeakData/highschool/Statistics-no-dups-cnclz.mmls"
+    additional_examples = generateExamples(
+        f"example_data/{braille_code.lower()}.brls",
+        f"example_data/mathml.mmls"
+    )
+    truncated_additional_examples = additional_examples.splitlines(keepends=True)
+    additional_examples = "".join(truncated_additional_examples[:500])
+    examples += "\n" + additional_examples
 
-    # unicode = read_unicode("xxx")
-    with open(input_braille_file, "r", encoding="utf-8") as f:
-        braille = f.read().splitlines()
-    with open(input_mathml_file, "r", encoding="utf-8") as f:
-        mathml = f.read().splitlines()
+    test_mathml_dir = "test_data/MathML"
+    test_braille_dir = f"test_data/{braille_code}"
+
+    # File paths for input - gather lines from directories
+    braille, mathml = readMatchingFiles(test_braille_dir, test_mathml_dir)
     if len(braille) != len(mathml):
         print("Error: Number of test inputs does not match number of expected outputs.")
         sys.exit(1)
 
-    chunk = slice(500, 599)  # select a subset for testing
+    # Use chunk_size parameter, default to len(mathml) if not provided
+    chunk_size = chunk_size if chunk_size is not None else len(mathml)
+    chunk = slice(0, chunk_size)
     braille = braille[chunk]
     mathml = mathml[chunk]
-    batch_size = 50
-    model = "gemini-3-flash-preview"
-    model = "gemini-2.5-flash"
+    batch_size = 80
+    # model = "gemini-3-flash-preview"
+    # model = "gemini-2.5-flash"
     # model = "gemini-2.5-flash-lite"
     model = "gemini-2.5-pro"
     # model = "gemini-3-pro-preview"
-    apiKeyName = "GEMINI_PAID_API_KEY"
     apiKeyName = "GEMINI_API_KEY"
+    # apiKeyName = "GEMINI_PAID_API_KEY"
+    print(f"Using API key: {apiKeyName}")
     n_examples = examples.count('\n')
 
     # GENERATE either braille or MathML
-    gen_braille = False
-    if gen_braille:
-        instructions = gen_braille_instructions_prolog + examples
-        input = mathml
-        expected = braille
-
-    else:
-        instructions = gen_mathml_instructions_prolog + examples
-        input = braille
-        expected = mathml
+    instructions = instructions_prolog + examples
+    input, expected = (mathml, braille) if gen_braille else (braille, mathml)
 
     print(f"Generating {'braille' if gen_braille else 'MathML'} with {n_examples} examples, "
           f"{len(input)} tests with {model} for {braille_code}.")
@@ -460,14 +526,60 @@ def main():
             instructions=instructions,
             example_braille_file=example_braille_file,
             example_mathml_file=example_mathml_file,
-            input_braille_file=input_braille_file,
-            input_mathml_file=input_mathml_file
+            input_braille_file=test_braille_dir,
+            input_mathml_file=test_mathml_dir
+        )
+        output_filename = (
+            f"{'to-' if gen_braille else 'from-'}{braille_code}-{model}-"
+            f"{n_examples}exs-{len(input)}tests.txt"
         )
         write_results_to_file(input, computed, expected, total_tokens,
-                              f"{'to-' if gen_braille else 'from-'}{braille_code}-{model}-{n_examples}exs-{len(input)}tests.txt",
-                              config=config)
+                              output_filename, config=config)
     except Exception as e:
         print(f"Conversion error: {e}")
+
+
+def main():
+    parser = argparse.ArgumentParser(
+        description='Generate braille or MathML using Gemini API',
+        epilog='''
+Examples:
+  # Generate MathML from Nemeth braille, process first 200 items:
+  python use_gemini.py mathml Nemeth 200
+
+  # Generate braille from MathML using UEB, process all items:
+  python use_gemini.py braille UEB
+
+  # Generate MathML from Nemeth braille, process all items:
+  python use_gemini.py mathml Nemeth
+
+Note: Requires GEMINI_API_KEY or GEMINI_PAID_API_KEY environment variable.
+        ''',
+        formatter_class=argparse.RawDescriptionHelpFormatter
+    )
+    parser.add_argument('output_type', type=str,
+                        help=('Output type: "braille" or "mathml" (case insensitive). '
+                              'If "mathml", generates MathML from braille. '
+                              'If "braille", generates braille from MathML.'))
+    parser.add_argument('braille_code', type=str,
+                        help='Braille code to use. Options: Nemeth, UEB, etc.')
+    parser.add_argument('chunk_size', type=int, nargs='?', default=None,
+                        help=('Number of items to process (defaults to all items if not provided). '
+                              'Useful for testing with a subset of data.'))
+
+    args = parser.parse_args()
+
+    # Parse output_type to determine gen_braille
+    output_type_lower = args.output_type.lower()
+    if output_type_lower not in ('braille', 'mathml'):
+        parser.error(
+            f'output_type must be "braille" or "mathml", got "{args.output_type}". '
+            f'Example: python use_gemini.py mathml Nemeth 200'
+        )
+    gen_braille = output_type_lower == 'braille'
+
+    # Call the refactored function with parsed arguments
+    run_conversion(gen_braille, args.braille_code, args.chunk_size)
 
 
 if __name__ == "__main__":
