@@ -65,7 +65,7 @@ def write_samples(output_dir, subfolder, source_name, extension, lines):
         f.writelines(lines)
 
 
-def split_aligned_data(nemeth_file, ueb_file, mathml_file, sample_size):
+def split_aligned_data(nemeth_file, ueb_file, mathml_file, sample_size, duplicate_oversampling_factor=2):
     """
     Sample two disjoint aligned sets from all three file types.
     Returns (test_samples, example_samples) for each file type.
@@ -74,29 +74,42 @@ def split_aligned_data(nemeth_file, ueb_file, mathml_file, sample_size):
     ueb_lines = read_file_lines(ueb_file)
     mathml_lines = read_file_lines(mathml_file)
 
-    min_lines = min(len(nemeth_lines), len(ueb_lines), len(mathml_lines))
-    if min_lines == 0:
+    if len(nemeth_lines) != len(ueb_lines) or len(ueb_lines) != len(mathml_lines):
+        print(f"Error: {nemeth_file}[{len(nemeth_lines)}] or "
+              f"{ueb_file}[{len(ueb_lines)}] or "
+              f"{mathml_file}[{len(mathml_lines)}] has different lengths")
         return ([], [], []), ([], [], [])
 
-    test_size = min(sample_size, min_lines)
-    remaining = min_lines - test_size
-    example_size = min(sample_size, remaining)
+    n_lines = len(nemeth_lines)
+    test_size = min(2*sample_size, n_lines)
 
-    all_indices = list(range(min_lines))
-    test_indices = set(random.sample(all_indices, test_size))
-    remaining_indices = [i for i in all_indices if i not in test_indices]
-    example_indices = set(random.sample(remaining_indices, example_size))
+    all_indices = list(range(0, test_size))
+    random_indices = random.sample(all_indices, test_size)
+    unique_indices: list[int] = []
+    unique_lines = set()
+    for i in range(0, len(random_indices)):
+        if all_indices[i] not in unique_lines:
+            unique_lines.add(all_indices[i])
+            unique_indices.append(random_indices[i])
+    if len(unique_indices) < sample_size:
+        return split_aligned_data(nemeth_file, ueb_file, mathml_file, sample_size, 2*duplicate_oversampling_factor)
 
-    test_indices_sorted = sorted(test_indices)
-    example_indices_sorted = sorted(example_indices)
+    unique_indices = unique_indices[:2*sample_size]
+    unique_indices = sorted(unique_indices)
+    test_nemeth = []
+    test_ueb = []
+    test_mathml = []
+    example_nemeth = []
+    example_ueb = []
+    example_mathml = []
+    for i in range(0, len(unique_indices), 2):
+        test_nemeth.append(nemeth_lines[unique_indices[i]])
+        test_ueb.append(ueb_lines[unique_indices[i]])
+        test_mathml.append(mathml_lines[unique_indices[i]])
 
-    test_nemeth = [nemeth_lines[i] for i in test_indices_sorted]
-    test_ueb = [ueb_lines[i] for i in test_indices_sorted]
-    test_mathml = [mathml_lines[i] for i in test_indices_sorted]
-
-    example_nemeth = [nemeth_lines[i] for i in example_indices_sorted]
-    example_ueb = [ueb_lines[i] for i in example_indices_sorted]
-    example_mathml = [mathml_lines[i] for i in example_indices_sorted]
+        example_nemeth.append(nemeth_lines[unique_indices[i+1]])
+        example_ueb.append(ueb_lines[unique_indices[i+1]])
+        example_mathml.append(mathml_lines[unique_indices[i+1]])
 
     return (test_nemeth, test_ueb, test_mathml), (example_nemeth, example_ueb, example_mathml)
 
@@ -153,6 +166,10 @@ def main():
     total_example_mathml = 0
     processed = 0
 
+    all_test_nemeth, all_test_ueb, all_test_mathml = [], [], []
+    all_example_nemeth, all_example_ueb, all_example_mathml = [], [], []
+    all_canonical_test_mathml, all_canonical_example_mathml = [], []
+
     for category, source_name, _ in sources:
         if source_name in excluded_sources:
             print(f"Skipping {source_name}: excluded")
@@ -181,13 +198,40 @@ def main():
         write_samples(test_canonical_output_dir, '', source_name, '.mmls', canonical_test_mathml)
         write_samples(example_canonical_output_dir, '', source_name, '.mmls', canonical_example_mathml)
 
-        total_test_nemeth += len(test_nemeth)
-        total_test_ueb += len(test_ueb)
-        total_test_mathml += len(test_mathml)
-        total_example_nemeth += len(ex_nemeth)
-        total_example_ueb += len(ex_ueb)
-        total_example_mathml += len(ex_mathml)
-        processed += 1
+        all_test_nemeth.extend(canonical_test_mathml)
+        all_test_ueb.extend(test_ueb)
+        all_test_mathml.extend(test_mathml)
+        all_example_nemeth.extend(ex_nemeth)
+        all_example_ueb.extend(ex_ueb)
+        all_example_mathml.extend(ex_mathml)
+        all_canonical_test_mathml.extend(canonical_test_mathml)
+        all_canonical_example_mathml.extend(canonical_example_mathml)
+
+    random.shuffle(all_test_nemeth)
+    random.shuffle(all_test_ueb)
+    random.shuffle(all_test_mathml)
+    random.shuffle(all_example_nemeth)
+    random.shuffle(all_example_ueb)
+    random.shuffle(all_example_mathml)
+    random.shuffle(all_canonical_test_mathml)
+    random.shuffle(all_canonical_example_mathml)
+
+    with open(f"{test_output_dir}/nemeth.brls", 'w', encoding='utf-8') as f:
+        f.writelines(all_test_nemeth)
+    with open(f"{test_output_dir}/ueb.brls", 'w', encoding='utf-8') as f:
+        f.writelines(all_test_ueb)
+    with open(f"{test_output_dir}/mathml.mmls", 'w', encoding='utf-8') as f:
+        f.writelines(all_test_mathml)
+    with open(f"{example_output_dir}/nemeth.brls", 'w', encoding='utf-8') as f:
+        f.writelines(all_example_nemeth)
+    with open(f"{example_output_dir}/ueb.brls", 'w', encoding='utf-8') as f:
+        f.writelines(all_example_ueb)
+    with open(f"{example_output_dir}/mathml.mmls", 'w', encoding='utf-8') as f:
+        f.writelines(all_example_mathml)
+    with open(f"{test_output_dir}/canonical-mathml.mmls", 'w', encoding='utf-8') as f:
+        f.writelines(all_canonical_test_mathml)
+    with open(f"{example_output_dir}/canonical-mathml.mmls", 'w', encoding='utf-8') as f:
+        f.writelines(all_canonical_example_mathml)
 
     print("\nCompleted!")
     print(f"Processed {processed} sources")
