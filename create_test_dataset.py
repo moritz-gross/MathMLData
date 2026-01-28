@@ -198,7 +198,7 @@ def main():
         write_samples(test_canonical_output_dir, '', source_name, '.mmls', canonical_test_mathml)
         write_samples(example_canonical_output_dir, '', source_name, '.mmls', canonical_example_mathml)
 
-        all_test_nemeth.extend(canonical_test_mathml)
+        all_test_nemeth.extend(test_nemeth)
         all_test_ueb.extend(test_ueb)
         all_test_mathml.extend(test_mathml)
         all_example_nemeth.extend(ex_nemeth)
