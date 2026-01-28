@@ -10,7 +10,7 @@ from pathlib import Path
 import sys
 parent_dir = str(Path(__file__).resolve().parent.parent)
 sys.path.append(parent_dir)
-import libmathcat_py as libmathcat
+import libmathcat_py as libmathcat  # noqa: E402
 
 sys.stdout.reconfigure(encoding='utf-8')  # in case print statements are used for debugging
 
@@ -56,12 +56,16 @@ logging.basicConfig(filename='batch_process.log', level=logging.ERROR)
 def ProcessFile(file_path: str, dest_folder: str, config: dict[str, str]) -> str:
     """
     Read all the MathML lines from file_path, convert to braille, and write the braille to dest_folder
+
     """
     file_path = Path(file_path)
-    filename = os.path.basename(file_path)
-    (batch_name, filename) = file_path.parts[-2:]
+    filename = file_path.stem     # base name with out .mml
+    batch_name, _ = file_path.parts[-2:]
     brailleCode = config["BrailleCode"]
-    output_path = os.path.join(dest_folder, brailleCode, batch_name, filename.replace('.mml', '.brl'))
+    canonicalize = config["canonicalize"]
+    if canonicalize:
+        filename += "-cnclz"
+    output_path = os.path.join(dest_folder, brailleCode, batch_name, filename + '.brls')
     os.makedirs(os.path.dirname(output_path), exist_ok=True)
     try:
         setMathCATPreferences(brailleCode)
@@ -72,8 +76,10 @@ def ProcessFile(file_path: str, dest_folder: str, config: dict[str, str]) -> str
             with open(output_path, 'w', encoding='utf8') as out_stream:
                 for line in in_stream.readlines():
                     try:
+                        canonicalized_line = setMathMLForMathCAT(line)
+                        if canonicalize:
+                            line = canonicalized_line
                         # print(f'Generating braille for "{line}"')
-                        setMathMLForMathCAT(line)
                         braille = getBraille()
                         out_stream.write(braille)
                         out_stream.write("\n")
@@ -84,6 +90,7 @@ def ProcessFile(file_path: str, dest_folder: str, config: dict[str, str]) -> str
         return output_path
     except Exception as e:
         raise e
+
 
 def ProcessAllFilesInDir(source_dir: str, dest_dir: str, config: dict[str, str], max_workers: int) -> None:
     if not os.path.exists(dest_dir):
@@ -111,12 +118,16 @@ def ProcessAllFilesInDir(source_dir: str, dest_dir: str, config: dict[str, str],
 
 def main():
     dest_dir = "./Braille"
+    canonicalize = True
+    ProcessAllFilesInDir("../SimpleSpeakData/highschool", dest_dir,
+                         {"BrailleCode": "Nemeth", "canonicalize": canonicalize}, max_workers=24)
+    ProcessAllFilesInDir("../SimpleSpeakData/college", dest_dir,
+                         {"BrailleCode": "Nemeth", "canonicalize": canonicalize}, max_workers=24)
 
-    ProcessAllFilesInDir("../SimpleSpeakData/highschool", dest_dir, {"BrailleCode": "Nemeth"}, max_workers=24)
-    ProcessAllFilesInDir("../SimpleSpeakData/college", dest_dir, {"BrailleCode": "Nemeth"}, max_workers=24)
-
-    ProcessAllFilesInDir("../SimpleSpeakData/highschool", dest_dir, {"BrailleCode": "UEB"}, max_workers=24)
-    ProcessAllFilesInDir("../SimpleSpeakData/college", dest_dir, {"BrailleCode": "UEB"}, max_workers=24)
+    ProcessAllFilesInDir("../SimpleSpeakData/highschool", dest_dir,
+                         {"BrailleCode": "UEB", "canonicalize": canonicalize}, max_workers=24)
+    ProcessAllFilesInDir("../SimpleSpeakData/college", dest_dir,
+                         {"BrailleCode": "UEB", "canonicalize": canonicalize}, max_workers=24)
 
 
 if __name__ == "__main__":
