@@ -298,7 +298,6 @@ IMPORTANT INSTRUCTIONS:
 - Provide ONLY the MathML output
 - Do NOT include explanations, comments, or any text besides the MathML
 - Ensure the output is valid, well-formed XML
-- Include the proper xmlns namespace in the <math> tag
 - Preserve mathematical meaning and structure accurately
 - Pay special attention to number indicators (⠼) and decimal points (⠨)
 - When you see ⠨ within a number context, it is ALWAYS a decimal point"""
