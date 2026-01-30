@@ -1,0 +1,27 @@
+# Configuration:
+#   Braille Code: UEB
+#   Generate Braille: True
+#   Model: gemini-2.5-flash
+#   API Key: GEMINI_API_KEY
+#   Batch Size: 40
+#   Number of Examples: 10191
+#   Example Braille File: RustTestData/UEB.brls
+#   Example MathML File: RustTestData/UEB.mmls
+#   Input Braille Dir: test_data/UEB
+#   Input MathML Dir: test_data/MathML
+#   Instructions (preview): You are an expert braille translator specializing in UEB braille. The user will provide a python list of strings, where each string is composed of represents math encoded in MathML (e.g., <math><mi>f<...
+#
+# 10 items. Usage info: prompt=304494, candidates=351, total=308289, time=750ms, TPS=2136.7521367521367.2f
+#
+# Match | Test Input | Expected | Computed
+✗ | <math><mrow><mi>f</mi><mo stretchy="false">(</mo><mi>t</mi><mo stretchy="false">)</mo><mo>=</mo><mi>a</mi><msup><mi>b</mi><mi>t</mi></msup></mrow></math> | ⠋⠐⠣⠞⠐⠜⠀⠐⠶⠀⠁⠃⠰⠔⠞ | ⠰⠰⠰⠋⠐⠣⠞⠐⠜⠀⠐⠶⠀⠁⠃⠔⠞
+✗ | <math><mrow><mi>g</mi><mo stretchy="false">(</mo><mi>t</mi><mo stretchy="false">)</mo><mo>=</mo><mi>a</mi><msup><mi>b</mi><mi>t</mi></msup><mo>+</mo><mi>c</mi></mrow></math> | ⠛⠐⠣⠞⠐⠜⠀⠐⠶⠀⠁⠃⠰⠔⠞⠐⠖⠉ | ⠰⠰⠰⠛⠐⠣⠞⠐⠜⠀⠐⠶⠀⠁⠃⠔⠞⠐⠖⠉
+✓ | <math><mn>10</mn></math> | ⠼⠁⠚ | ⠼⠁⠚
+✓ | <math><mrow><mn>2</mn><mo>+</mo><mn>3</mn><mo>=</mo><mn>5</mn><mtext>:</mtext></mrow></math> | ⠼⠃⠐⠖⠼⠉⠀⠐⠶⠀⠼⠑⠒ | ⠼⠃⠐⠖⠼⠉⠀⠐⠶⠀⠼⠑⠒
+✓ | <math><mn>2</mn></math> | ⠼⠃ | ⠼⠃
+✓ | <math><mrow><mn>2</mn><mo>⋅</mo><mn>3</mn><mo>=</mo><mn>6</mn><mtext>.</mtext></mrow></math> | ⠼⠃⠐⠲⠼⠉⠀⠐⠶⠀⠼⠋⠲ | ⠼⠃⠐⠲⠼⠉⠀⠐⠶⠀⠼⠋⠲
+✗ | <math><mrow><mi>f</mi><mo>:</mo><mi>B</mi><mo accent="false" stretchy="false">→</mo><mi>C</mi><mtext>,</mtext></mrow></math> | ⠰⠰⠰⠋⠒⠀⠠⠃⠀⠳⠕⠀⠠⠉⠂⠀⠰⠄ | ⠰⠰⠰⠋⠒⠠⠃⠀⠳⠕⠀⠠⠉⠂
+✗ | <math><mrow><mo stretchy="false">(</mo><mi>f</mi><mo>∘</mo><mi>g</mi><mo stretchy="false">)</mo><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>=</mo><mi>f</mi><mo stretchy="false">(</mo><mi>g</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo stretchy="false">)</mo><mtext>.</mtext></mrow></math> | ⠐⠣⠋⠐⠴⠛⠐⠜⠐⠣⠭⠐⠜⠀⠐⠶⠀⠋⠐⠣⠛⠐⠣⠭⠐⠜⠐⠜⠲ | ⠰⠰⠰⠐⠣⠋⠐⠴⠛⠐⠜⠐⠣⠭⠐⠜⠀⠐⠶⠀⠋⠐⠣⠛⠐⠣⠭⠐⠜⠐⠜⠲
+✗ | <math><mi>g</mi></math> | ⠰⠛ | ⠛
+✗ | <math><mi>f</mi></math> | ⠰⠋ | ⠋
+# Matches: 4 out of 10: 40%.

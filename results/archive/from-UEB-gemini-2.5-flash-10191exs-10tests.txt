@@ -1,0 +1,44 @@
+# Configuration:
+#   Braille Code: UEB
+#   Generate Braille: False
+#   Model: gemini-2.5-flash
+#   API Key: GEMINI_API_KEY
+#   Batch Size: 40
+#   Number of Examples: 10191
+#   Example Braille File: RustTestData/UEB.brls
+#   Example MathML File: RustTestData/UEB.mmls
+#   Input Braille Dir: test_data/UEB
+#   Input MathML Dir: test_data/MathML
+#   Instructions (preview): You are an expert braille translator specializing in UEB braille. The user will provide a python list of strings, where each string is composed of Unicode UEB braille characters.  Here are two example...
+#
+# 10 items. Usage info: prompt=304305, candidates=428, total=306640, time=1043ms, TPS=2436.9158878504672.2f
+#
+
+# NOT Normalized MathML
+# Match | Test Input | Expected | Computed
+✓ | ⠋⠐⠣⠞⠐⠜⠀⠐⠶⠀⠁⠃⠰⠔⠞ | <math><mrow><mi>f</mi><mo stretchy="false">(</mo><mi>t</mi><mo stretchy="false">)</mo><mo>=</mo><mi>a</mi><msup><mi>b</mi><mi>t</mi></msup></mrow></math> | <math><mi>f</mi><mo stretchy="false">(</mo><mi>t</mi><mo stretchy="false">)</mo><mo>=</mo><mi>a</mi><msup><mi>b</mi><mi>t</mi></msup></math>
+✓ | ⠛⠐⠣⠞⠐⠜⠀⠐⠶⠀⠁⠃⠰⠔⠞⠐⠖⠉ | <math><mrow><mi>g</mi><mo stretchy="false">(</mo><mi>t</mi><mo stretchy="false">)</mo><mo>=</mo><mi>a</mi><msup><mi>b</mi><mi>t</mi></msup><mo>+</mo><mi>c</mi></mrow></math> | <math><mi>g</mi><mo stretchy="false">(</mo><mi>t</mi><mo stretchy="false">)</mo><mo>=</mo><mi>a</mi><msup><mi>b</mi><mi>t</mi></msup><mo>+</mo><mi>c</mi></math>
+✓ | ⠼⠁⠚ | <math><mn>10</mn></math> | <math><mn>10</mn></math>
+✓ | ⠼⠃⠐⠖⠼⠉⠀⠐⠶⠀⠼⠑⠒ | <math><mrow><mn>2</mn><mo>+</mo><mn>3</mn><mo>=</mo><mn>5</mn><mtext>:</mtext></mrow></math> | <math><mn>2</mn><mo>+</mo><mn>3</mn><mo>=</mo><mn>5</mn><mo>:</mo></math>
+✓ | ⠼⠃ | <math><mn>2</mn></math> | <math><mn>2</mn></math>
+✓ | ⠼⠃⠐⠲⠼⠉⠀⠐⠶⠀⠼⠋⠲ | <math><mrow><mn>2</mn><mo>⋅</mo><mn>3</mn><mo>=</mo><mn>6</mn><mtext>.</mtext></mrow></math> | <math><mn>2</mn><mo>⋅</mo><mn>3</mn><mo>=</mo><mn>6</mn><mo>.</mo></math>
+✓ | ⠰⠰⠰⠋⠒⠀⠠⠃⠀⠳⠕⠀⠠⠉⠂⠀⠰⠄ | <math><mrow><mi>f</mi><mo>:</mo><mi>B</mi><mo accent="false" stretchy="false">→</mo><mi>C</mi><mtext>,</mtext></mrow></math> | <math><mi>f</mi><mo>:</mo><mi>B</mi><mo stretchy="false">→</mo><mi>C</mi><mo>,</mo></math>
+✓ | ⠐⠣⠋⠐⠴⠛⠐⠜⠐⠣⠭⠐⠜⠀⠐⠶⠀⠋⠐⠣⠛⠐⠣⠭⠐⠜⠐⠜⠲ | <math><mrow><mo stretchy="false">(</mo><mi>f</mi><mo>∘</mo><mi>g</mi><mo stretchy="false">)</mo><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>=</mo><mi>f</mi><mo stretchy="false">(</mo><mi>g</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo stretchy="false">)</mo><mtext>.</mtext></mrow></math> | <math><mo stretchy="false">(</mo><mi>f</mi><mo>∘</mo><mi>g</mi><mo stretchy="false">)</mo><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>=</mo><mi>f</mi><mo stretchy="false">(</mo><mi>g</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo stretchy="false">)</mo><mo>.</mo></math>
+✓ | ⠰⠛ | <math><mi>g</mi></math> | <math><mi>g</mi></math>
+✓ | ⠰⠋ | <math><mi>f</mi></math> | <math><mi>f</mi></math>
+
+#===========
+
+# Normalized MathML
+Match | Test Input | Expected | Computed
+✓ | ⠋⠐⠣⠞⠐⠜⠀⠐⠶⠀⠁⠃⠰⠔⠞ | <math> <mrow> <mrow> <mi>f</mi> <mo>⁡</mo> <mrow> <mo>(</mo> <mi>t</mi> <mo>)</mo> </mrow> </mrow> <mo>=</mo> <mrow> <mi>a</mi> <mo>⁢</mo> <msup> <mi>b</mi> <mi>t</mi> </msup> </mrow> </mrow> </math> | <math> <mrow> <mrow> <mi>f</mi> <mo>⁡</mo> <mrow> <mo>(</mo> <mi>t</mi> <mo>)</mo> </mrow> </mrow> <mo>=</mo> <mrow> <mi>a</mi> <mo>⁢</mo> <msup> <mi>b</mi> <mi>t</mi> </msup> </mrow> </mrow> </math>
+✓ | ⠛⠐⠣⠞⠐⠜⠀⠐⠶⠀⠁⠃⠰⠔⠞⠐⠖⠉ | <math> <mrow> <mrow> <mi>g</mi> <mo>⁡</mo> <mrow> <mo>(</mo> <mi>t</mi> <mo>)</mo> </mrow> </mrow> <mo>=</mo> <mrow> <mrow> <mi>a</mi> <mo>⁢</mo> <msup> <mi>b</mi> <mi>t</mi> </msup> </mrow> <mo>+</mo> <mi>c</mi> </mrow> </mrow> </math> | <math> <mrow> <mrow> <mi>g</mi> <mo>⁡</mo> <mrow> <mo>(</mo> <mi>t</mi> <mo>)</mo> </mrow> </mrow> <mo>=</mo> <mrow> <mrow> <mi>a</mi> <mo>⁢</mo> <msup> <mi>b</mi> <mi>t</mi> </msup> </mrow> <mo>+</mo> <mi>c</mi> </mrow> </mrow> </math>
+✓ | ⠼⠁⠚ | <math> <mn>10</mn> </math> | <math> <mn>10</mn> </math>
+✓ | ⠼⠃⠐⠖⠼⠉⠀⠐⠶⠀⠼⠑⠒ | <math> <mrow> <mrow> <mrow> <mn>2</mn> <mo>+</mo> <mn>3</mn> </mrow> <mo>=</mo> <mn>5</mn> </mrow> <mo>:</mo> </mrow> </math> | <math> <mrow> <mrow> <mrow> <mn>2</mn> <mo>+</mo> <mn>3</mn> </mrow> <mo>=</mo> <mn>5</mn> </mrow> <mo>:</mo> </mrow> </math>
+✓ | ⠼⠃ | <math> <mn>2</mn> </math> | <math> <mn>2</mn> </math>
+✓ | ⠼⠃⠐⠲⠼⠉⠀⠐⠶⠀⠼⠋⠲ | <math> <mrow> <mrow> <mrow> <mn>2</mn> <mo>⋅</mo> <mn>3</mn> </mrow> <mo>=</mo> <mn>6</mn> </mrow> <mo>.</mo> </mrow> </math> | <math> <mrow> <mrow> <mrow> <mn>2</mn> <mo>⋅</mo> <mn>3</mn> </mrow> <mo>=</mo> <mn>6</mn> </mrow> <mo>.</mo> </mrow> </math>
+✓ | ⠰⠰⠰⠋⠒⠀⠠⠃⠀⠳⠕⠀⠠⠉⠂⠀⠰⠄ | <math> <mrow> <mrow> <mi>f</mi> <mo>:</mo> <mrow> <mi>B</mi> <mo>→</mo> <mi>C</mi> </mrow> </mrow> <mo>,</mo> </mrow> </math> | <math> <mrow> <mrow> <mi>f</mi> <mo>:</mo> <mrow> <mi>B</mi> <mo>→</mo> <mi>C</mi> </mrow> </mrow> <mo>,</mo> </mrow> </math>
+✓ | ⠐⠣⠋⠐⠴⠛⠐⠜⠐⠣⠭⠐⠜⠀⠐⠶⠀⠋⠐⠣⠛⠐⠣⠭⠐⠜⠐⠜⠲ | <math> <mrow> <mrow> <mrow> <mrow> <mo>(</mo> <mrow> <mi>f</mi> <mo>∘</mo> <mi>g</mi> </mrow> <mo>)</mo> </mrow> <mo>⁢</mo> <mrow> <mo>(</mo> <mi>x</mi> <mo>)</mo> </mrow> </mrow> <mo>=</mo> <mrow> <mi>f</mi> <mo>⁡</mo> <mrow> <mo>(</mo> <mrow> <mi>g</mi> <mo>⁡</mo> <mrow> <mo>(</mo> <mi>x</mi> <mo>)</mo> </mrow> </mrow> <mo>)</mo> </mrow> </mrow> </mrow> <mo>.</mo> </mrow> </math> | <math> <mrow> <mrow> <mrow> <mrow> <mo>(</mo> <mrow> <mi>f</mi> <mo>∘</mo> <mi>g</mi> </mrow> <mo>)</mo> </mrow> <mo>⁢</mo> <mrow> <mo>(</mo> <mi>x</mi> <mo>)</mo> </mrow> </mrow> <mo>=</mo> <mrow> <mi>f</mi> <mo>⁡</mo> <mrow> <mo>(</mo> <mrow> <mi>g</mi> <mo>⁡</mo> <mrow> <mo>(</mo> <mi>x</mi> <mo>)</mo> </mrow> </mrow> <mo>)</mo> </mrow> </mrow> </mrow> <mo>.</mo> </mrow> </math>
+✓ | ⠰⠛ | <math> <mi>g</mi> </math> | <math> <mi>g</mi> </math>
+✓ | ⠰⠋ | <math> <mi>f</mi> </math> | <math> <mi>f</mi> </math>
+# Matches: 10 out of 10: 100%.

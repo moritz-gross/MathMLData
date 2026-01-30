@@ -1,0 +1,18 @@
+# Configuration:
+#   Braille Code: Nemeth
+#   Generate Braille: True
+#   Model: gemini-2.5-flash
+#   API Key: GEMINI_API_KEY
+#   Batch Size: 40
+#   Number of Examples: 10311
+#   Example Braille File: RustTestData/Nemeth.brls
+#   Example MathML File: RustTestData/Nemeth.mmls
+#   Input Braille Dir: test_data/Nemeth
+#   Input MathML Dir: test_data/MathML
+#   Instructions (preview): You are an expert braille translator specializing in Nemeth braille. The user will provide a python list of strings, where each string is composed of represents math encoded in MathML (e.g., <math><mi...
+#
+# 1 items. Usage info: prompt=286935, candidates=243, total=288558, time=399ms, TPS=1641.9753086419753.2f
+#
+# Match | Test Input | Expected | Computed
+✗ | <math><mrow><mi>f</mi><mo stretchy="false">(</mo><mi>t</mi><mo stretchy="false">)</mo><mo>=</mo><mi>a</mi><msup><mi>b</mi><mi>t</mi></msup></mrow></math> | ⠋⠷⠞⠾⠀⠨⠅⠀⠁⠃⠘⠞ | ⠋⠷⠞⠾⠀⠨⠅⠀⠁⠃⠘⠞|⠛⠷⠞⠾⠀⠨⠅⠀⠁⠃⠘⠞⠬⠉|⠼⠂⠴|⠼⠆⠬⠒⠀⠨⠅⠀⠼⠢⠸⠒|⠼⠆|⠼⠆⠈⠡⠒⠀⠨⠅⠀⠼⠖⠸⠲|⠋⠸⠒⠠⠃⠀⠫⠕⠀⠠⠉⠠|⠷⠋⠨⠡⠛⠾⠷⠭⠾⠀⠨⠅⠀⠋⠷⠛⠷⠭⠾⠾⠸⠲|⠛
+# Matches: 0 out of 1: 0%.
