@@ -2,6 +2,7 @@ import time
 import logging
 import re
 import argparse
+import threading
 from typing import Any, NamedTuple  # 'Any' is still imported from typing
 from google import genai
 from google.genai import types
@@ -25,12 +26,34 @@ class RunConfig(NamedTuple):
     apiKeyName: str
     batch_size: int
     n_examples: int
-    chunk: slice | None
     instructions: str
     example_braille_file: str
     example_mathml_file: str
     input_braille_file: str
     input_mathml_file: str
+
+    def print_config(self, n_tests: int | None = None, short: bool = False) -> str:
+        """Return configuration values as a formatted string."""
+        lines = []
+        lines.append("\nConfiguration:")
+        lines.append(f"  Braille Code: {self.braille_code}")
+        lines.append(f"  Generate Braille: {self.gen_braille}")
+        lines.append(f"  Model: {self.model}")
+        lines.append(f"  API Key: {self.apiKeyName}")
+        lines.append(f"  Batch Size: {self.batch_size}")
+        lines.append(f"  Number of Examples: {self.n_examples}")
+        if n_tests is not None:
+            lines.append(f"  Number of Tests: {n_tests}")
+        lines.append(f"  Example Braille File: {self.example_braille_file}")
+        lines.append(f"  Example MathML File: {self.example_mathml_file}")
+        lines.append(f"  Input Braille Dir: {self.input_braille_file}")
+        lines.append(f"  Input MathML Dir: {self.input_mathml_file}")
+        if short:
+            instructions_preview = self.instructions[:150] + "..." if len(self.instructions) > 150 else self.instructions
+            lines.append(f"  Instructions (preview): {instructions_preview}")
+        else:
+            lines.append(f"  Instructions: {self.instructions}")
+        return "\n".join(lines)
 
 
 def convert_input_with_model(
@@ -38,7 +61,8 @@ def convert_input_with_model(
     input: list[str],
     model: str,
     apiKeyName: str,
-    batch_size: int = 20
+    batch_size: int,
+    run_info: str
 ) -> tuple[list[str], dict[str, int], float]:
     """
     Splits input into batches, processes them with retries/streaming,
@@ -61,18 +85,18 @@ def convert_input_with_model(
     for i in range(0, len(input), batch_size):
         batch = input[i:i + batch_size]
         batch_id = (i // batch_size) + 1
-        print(f"\n--- Processing Batch {batch_id} (Items {i+1} to {i+len(batch)}) ---")
+        print(f"\n--- Processing Batch {batch_id} (Items {i+1} to {i+len(batch)}) {run_info} ---")
 
         # 3. Call helper (now returns duration too)
         # We use Any for usage_metadata to be safe across SDK versions
         try:
-            batch_text, batch_usage, batch_time = generate_with_retry(client, model, instructions, batch, 3)
+            batch_text, batch_usage, batch_time = generate_with_retry(client, model, instructions, batch, run_info, 3)
         except (exceptions.ServiceUnavailable, exceptions.ServerError) as e:
             if first_attempt:
                 # reestablish connection and try one more time
                 client = genai.Client(api_key=api_key, http_options={"timeout": 2400000})  # likely large than needed
                 first_attempt = False
-                batch_text, batch_usage, batch_time = generate_with_retry(client, model, instructions, batch, 3)
+                batch_text, batch_usage, batch_time = generate_with_retry(client, model, instructions, batch, run_info, 3)
             else:
                 print(f"Exception raised twice during generation: {e}")
                 batch_text, batch_usage, batch_time = None, None, 0.0
@@ -99,7 +123,7 @@ def convert_input_with_model(
             print(f"   > Batch Time: {batch_time:.2f}s")
             # We use safe access or Any here since it's a specific SDK object
             if batch_usage:
-                print(f"   > Batch Token Usage: {batch_usage.total_token_count} "
+                print(f"   > Batch Token Usage ({run_info}): {batch_usage.total_token_count} "
                       f"(Prompt: {batch_usage.prompt_token_count}, Output: {batch_usage.candidates_token_count})")
 
     # trim the start and end, then split the string at '|next-item|' and return a list of strings
@@ -141,13 +165,15 @@ def generate_with_retry(
     model: str,
     instructions: str,
     content: list[str],
+    run_info: str,
     max_retries: int = 3,
     depth: int = 0
 ) -> tuple[str, Any, float]:
 
     indent = "  " * depth
     t0 = time.perf_counter()
-    delay = 2
+    time_to_first_token = -1000.0      # initialize to a negative value to indicate not yet received
+    delay = 30
 
     # Attempt Loop (Handles 503s and standard failures)
     for attempt in range(1, max_retries + 1):
@@ -194,7 +220,7 @@ def generate_with_retry(
             if finish_reason != "STOP":
                 raise Exception(f"Incomplete generation: {finish_reason}")
 
-            print("\n\n--- Performance Summary ---")
+            print(f"\n\n--- Performance Summary for {run_info} ---")
             total_time = time.perf_counter() - t0
             print(f"Total Latency:    {total_time:.2f} s")
             print(f"Time to 1st Token:{time_to_first_token:.2f} s")
@@ -207,10 +233,10 @@ def generate_with_retry(
             if str(e) != "MAX_TOKENS":
                 raise e
 
-            print(f"{indent}[!] MAX_TOKENS hit on {len(content)} lines.")
+            print(f"{indent}[!] In {run_info}: MAX_TOKENS hit on {len(content)} lines.")
 
             if len(content) <= 1:
-                print(f"{indent}[X] Critical: Single input line is too large.")
+                print(f"{indent}[X] Critical in {run_info}: Single input line is too large.")
                 raise e
 
             mid = len(content) // 2
@@ -222,10 +248,10 @@ def generate_with_retry(
             # Recursive calls (Depth + 1)
             # We don't need to catch exceptions here; let them bubble up
             text_a, usage_a, _ = generate_with_retry(
-                client, model, instructions, left_part, max_retries, depth + 1
+                client, model, instructions, left_part, run_info, max_retries, depth + 1
             )
             text_b, usage_b, _ = generate_with_retry(
-                client, model, instructions, right_part, max_retries, depth + 1
+                client, model, instructions, right_part, run_info, max_retries, depth + 1
             )
 
             if text_a is None or text_b is None:
@@ -238,16 +264,24 @@ def generate_with_retry(
 
         except Exception as e:
             if "503" in str(e) or "UNAVAILABLE" in str(e):
-                print(f"{indent}[!] 503 Unavailable (Attempt {attempt}/{max_retries}). Retrying in {delay}s...")
+                print(f"{indent}[!] 503 Unavailable (Attempt {attempt}/{max_retries}) {run_info}. Retrying in {delay}s...")
                 time.sleep(delay)
                 delay *= 2
             else:
                 print(f"{indent}Exception Type: {type(e).__name__}")
-                print(f"{indent}[X] Critical Error: {e}")
-                raise e
+                print(f"{indent}[X] Critical Error in {run_info}: {e}")
+                if len(full_text_list) > 0:
+                    total_time = time.perf_counter() - t0
+                    return "".join(full_text_list), final_usage, total_time - time_to_first_token
+                else:
+                    raise e
 
-    print(f"{indent}[X] Failed after max retries.")
-    return "Error", None, time.perf_counter() - t0 - time_to_first_token
+    print(f"{indent}[X] Failed after max retries in {run_info}.")
+    if len(full_text_list) > 0:
+        total_time = time.perf_counter() - t0
+        return "".join(full_text_list), final_usage, total_time - time_to_first_token
+    else:
+        return "Error", None, time.perf_counter() - t0 - time_to_first_token
 
 
 def write_results_to_file(input: list[str],
@@ -280,28 +314,10 @@ def write_results_to_file(input: list[str],
     with open(output_file, "w", encoding="utf-8") as f:
         # Write variable values from main() at the start
         if config:
-            f.write("# Example files (used in generateExamples):\n")
-            f.write(f"# example_braille_file = {config.example_braille_file}\n")
-            f.write(f"# example_mathml_file = {config.example_mathml_file}\n")
-            f.write("#\n")
-            f.write("# Input files:\n")
-            f.write(f"# input_braille_file = {config.input_braille_file}\n")
-            f.write(f"# input_mathml_file = {config.input_mathml_file}\n")
-            f.write("#\n")
-            f.write("# Configuration variables:\n")
-            f.write(f"# braille_code = {config.braille_code}\n")
-            f.write(f"# gen_braille = {config.gen_braille}\n")
-            f.write(f"# model = {config.model}\n")
-            f.write(f"# apiKeyName = {config.apiKeyName}\n")
-            f.write(f"# batch_size = {config.batch_size}\n")
-            f.write(f"# n_examples = {config.n_examples}\n")
-            if config.chunk:
-                f.write(f"# chunk = slice({config.chunk.start}, {config.chunk.stop})\n")
-            f.write("#\n")
-            if config.instructions:
-                # Write instructions with proper line breaks and # prefix
-                f.write("# instructions = \n")
-                for line in config.instructions.split('\n'):
+            # Write config to file with # prefix on each line
+            config_str = config.print_config()
+            for line in config_str.split('\n'):
+                if line.strip():  # Skip empty lines
                     f.write(f"# {line}\n")
             f.write("#\n")
 
@@ -338,8 +354,8 @@ def write_results_to_file(input: list[str],
                 match = "✓" if checked.isEqual else "✗"
                 f.write(f"{match} | {tests} | {checked.canonicalOriginal} | {checked.canonicalComputed}\n")
 
-        f.write(f"# Matches: {match_count} out of {len(input)}: {(match_count/len(input)*100):.0f}%.")
-        print(f"Matches: {match_count} out of {len(input)}: {(match_count/len(input)*100):.0f}%. "
+        f.write(f"# Matches: {match_count} out of {len(computed_output)}: {(match_count/len(computed_output)*100):.0f}%.")
+        print(f"Matches: {match_count} out of {len(computed_output)}: {(match_count/len(computed_output)*100):.0f}%. "
               f"Results written to {output_file}. ")
 
 
@@ -414,7 +430,7 @@ def getInstructionsProlog(gen_braille: bool, braille_code: str) -> str:
     """
     if gen_braille:
         return (
-            f"You are an expert Braille translator specializing in {braille_code} braille. "
+            f"You are an expert braille translator specializing in {braille_code} braille. "
             "The user will provide a python list of strings, "
             "where each string is composed of represents math encoded in MathML "
             "(e.g., <math><mi>f</mi><mrow><mo>(</mo><mfrac><mn>1</mn><mn>2</mn></mfrac><mo>)</mo></mrow></math>). "
@@ -432,33 +448,34 @@ def getInstructionsProlog(gen_braille: bool, braille_code: str) -> str:
         )
     else:
         return (
-            f"You are an expert Braille translator specializing in {braille_code} braille. "
+            f"You are an expert braille translator specializing in {braille_code} braille. "
             "The user will provide a python list of strings, "
-            f"where each string is composed of Unicode {braille_code} Braille characters.  "
+            f"where each string is composed of Unicode {braille_code} braille characters.  "
             "Here are two examples: '⠠⠑⠀⠨⠅⠀⠍⠉⠘⠆' and  '⠎⠊⠝⠀⠷⠨⠹⠾'. "
-            "Your task is to translate each exact Braille sequence of characters into valid MathML code. "
+            "Your task is to translate each exact {braille_code} braille sequence of characters into valid MathML code. "
             "For each braille input, output ONLY the raw MathML string starting with <math> and ending with </math>. "
             "Every element in the MathML must be properly closed and nested. "
             "Do not include markdown formatting, explanations, or any other text. "
             "Do not include any newlines or carriage returns. "
+            "Do not include any braille unicode characters in the MathML output. "
             "Add '|next-item|' between each MathML output. "
             "Below are some examples of braille/MathML pairs separated by '|' "
             "that should be considered the ground truth:\n"
         )
 
 
-def run_conversion(
+def prepare_conversion_config(
     gen_braille: bool,
     braille_code: str,
-    chunk_size: int | None = None
-) -> None:
+    n_examples: int | None,
+    n_tests: int | None,
+    batch_size: int
+) -> tuple[RunConfig, str, list[str], list[str], str, str]:
     """
-    Run the conversion process to generate braille or MathML.
+    Prepare configuration and data for a conversion run.
 
-    Args:
-        gen_braille: If True, generates braille from MathML. If False, generates MathML from braille.
-        braille_code: The braille code to use (e.g., "Nemeth", "UEB")
-        chunk_size: Number of items to process (defaults to all items if None)
+    Returns:
+        Tuple of (config, instructions, test_input, expected_output, model, apiKeyName)
     """
     # Get instructions prolog based on output type
     instructions_prolog = getInstructionsProlog(gen_braille, braille_code)
@@ -467,15 +484,24 @@ def run_conversion(
     example_braille_file = f"RustTestData/{braille_code}.brls"
     example_mathml_file = f"RustTestData/{braille_code}.mmls"
     # example_mathml_file = f"RustTestData/{braille_code}-cnclz.mmls"
-    examples = generateExamples(example_braille_file, example_mathml_file)
 
-    additional_examples = generateExamples(
-        f"example_data/{braille_code.lower()}.brls",
-        f"example_data/mathml.mmls"
-    )
-    truncated_additional_examples = additional_examples.splitlines(keepends=True)
-    additional_examples = "".join(truncated_additional_examples[:1000])
-    examples += "\n" + additional_examples
+    if n_examples is None or n_examples > 0:
+        examples = generateExamples(example_braille_file, example_mathml_file)
+        n_test_examples = examples.count('\n')
+        if n_examples is None:
+            n_examples = n_test_examples
+        else:
+            n_examples = min(n_examples, n_test_examples)
+            additional_examples = generateExamples(
+                f"example_data/{braille_code.lower()}.brls",
+                "example_data/mathml.mmls"
+            )
+            truncated_additional_examples = additional_examples.splitlines(keepends=True)
+            additional_examples = "".join(truncated_additional_examples[:n_examples])
+            examples += "\n" + additional_examples
+            n_examples += n_test_examples
+    else:
+        examples = ""
 
     test_mathml_dir = "test_data/MathML"
     test_braille_dir = f"test_data/{braille_code}"
@@ -486,54 +512,78 @@ def run_conversion(
         print("Error: Number of test inputs does not match number of expected outputs.")
         sys.exit(1)
 
-    # Use chunk_size parameter, default to len(mathml) if not provided
-    chunk_size = chunk_size if chunk_size is not None else len(mathml)
-    chunk = slice(0, chunk_size)
-    braille = braille[chunk]
-    mathml = mathml[chunk]
-    batch_size = 80
+    # Use n_tests parameter, default to len(mathml) if not provided
+    n_tests_actual = min(n_tests, len(mathml)) if n_tests is not None else len(mathml)
+    braille = braille[:n_tests_actual]
+    mathml = mathml[:n_tests_actual]
     # model = "gemini-3-flash-preview"
     # model = "gemini-2.5-flash"
     # model = "gemini-2.5-flash-lite"
     model = "gemini-2.5-pro"
-    # model = "gemini-3-pro-preview"
+    model = "gemini-3-pro-preview"
     apiKeyName = "GEMINI_API_KEY"
-    # apiKeyName = "GEMINI_PAID_API_KEY"
-    print(f"Using API key: {apiKeyName}")
-    n_examples = examples.count('\n')
+    apiKeyName = "GEMINI_PAID_API_KEY"
 
     # GENERATE either braille or MathML
     instructions = instructions_prolog + examples
-    input, expected = (mathml, braille) if gen_braille else (braille, mathml)
+    test_input, expected = (mathml, braille) if gen_braille else (braille, mathml)
 
-    print(f"Generating {'braille' if gen_braille else 'MathML'} with {n_examples} examples, "
-          f"{len(input)} tests with {model} for {braille_code}.")
+    # Create config
+    config = RunConfig(
+        braille_code=braille_code,
+        gen_braille=gen_braille,
+        model=model,
+        apiKeyName=apiKeyName,
+        batch_size=batch_size,
+        n_examples=n_examples,
+        instructions=instructions,
+        example_braille_file=example_braille_file,
+        example_mathml_file=example_mathml_file,
+        input_braille_file=test_braille_dir,
+        input_mathml_file=test_mathml_dir
+    )
+
+    return config, instructions, test_input, expected, model, apiKeyName
+
+
+def run_conversion(
+    config: RunConfig,
+    instructions: str,
+    test_input: list[str],
+    expected: list[str],
+    model: str,
+    apiKeyName: str,
+    batch_size: int
+) -> None:
+    """
+    Run the conversion process to generate braille or MathML.
+
+    Args:
+        config: Pre-configured RunConfig object
+        instructions: Full instructions string for the model
+        test_input: List of input strings to process
+        expected: List of expected output strings
+        model: Model name to use
+        apiKeyName: API key environment variable name
+        batch_size: Batch size for processing
+    """
+    print(f"Using API key: {apiKeyName}")
+    print(f"Generating {'braille' if config.gen_braille else 'MathML'} with {config.n_examples} examples, "
+          f"{len(test_input)} tests with {model} for {config.braille_code}.")
+
     try:
+        run_info = f"{'to-' if config.gen_braille else 'from-'}{config.braille_code}"
         computed, total_tokens, total_generation_time = convert_input_with_model(
-            instructions, input, model, apiKeyName, batch_size
+            instructions, test_input, model, apiKeyName, batch_size, run_info
         )
         if computed is None:
             computed = []
         total_tokens['time'] = round(1000 * total_generation_time)  # ms -- needs to be an int
-        config = RunConfig(
-            braille_code=braille_code,
-            gen_braille=gen_braille,
-            model=model,
-            apiKeyName=apiKeyName,
-            batch_size=batch_size,
-            n_examples=n_examples,
-            chunk=chunk,
-            instructions=instructions,
-            example_braille_file=example_braille_file,
-            example_mathml_file=example_mathml_file,
-            input_braille_file=test_braille_dir,
-            input_mathml_file=test_mathml_dir
-        )
         output_filename = (
-            f"{'to-' if gen_braille else 'from-'}{braille_code}-{model}-"
-            f"{n_examples}exs-{len(input)}tests.txt"
+            f"{'to-' if config.gen_braille else 'from-'}{config.braille_code}-{model}-"
+            f"{config.n_examples}exs-{len(test_input)}tests.txt"
         )
-        write_results_to_file(input, computed, expected, total_tokens,
+        write_results_to_file(test_input, computed, expected, total_tokens,
                               output_filename, config=config)
     except Exception as e:
         print(f"Conversion error: {e}")
@@ -544,42 +594,129 @@ def main():
         description='Generate braille or MathML using Gemini API',
         epilog='''
 Examples:
-  # Generate MathML from Nemeth braille, process first 200 items:
-  python use_gemini.py mathml Nemeth 200
+  # Generate MathML from Nemeth braille, use 100 additional examples and 200 tests:
+  python use_gemini.py mathml Nemeth -e 100 -t 200
 
-  # Generate braille from MathML using UEB, process all items:
-  python use_gemini.py braille UEB
+  # Generate braille from MathML using UEB, use all examples and all tests:
+  python use_gemini.py braille UEB -e 9999 -t -1
 
-  # Generate MathML from Nemeth braille, process all items:
-  python use_gemini.py mathml Nemeth
+  # Generate MathML from Nemeth braille, use only rust examples and 50 tests with batch size 40:
+  python use_gemini.py mathml Nemeth -e -1 -t 50 -b 40
 
 Note: Requires GEMINI_API_KEY or GEMINI_PAID_API_KEY environment variable.
         ''',
         formatter_class=argparse.RawDescriptionHelpFormatter
     )
-    parser.add_argument('output_type', type=str,
-                        help=('Output type: "braille" or "mathml" (case insensitive). '
-                              'If "mathml", generates MathML from braille. '
-                              'If "braille", generates braille from MathML.'))
-    parser.add_argument('braille_code', type=str,
-                        help='Braille code to use. Options: Nemeth, UEB, etc.')
-    parser.add_argument('chunk_size', type=int, nargs='?', default=None,
-                        help=('Number of items to process (defaults to all items if not provided). '
-                              'Useful for testing with a subset of data.'))
+    parser.add_argument('-e', '--examples', type=int, required=True,
+                        help=('Number of examples to use. A negative number means use all available examples.'))
+    parser.add_argument('-t', '--tests', type=int, required=True,
+                        help=('Number of tests to process. A negative number means use all available tests.'))
+    parser.add_argument('-b', '--batch-size', type=int, default=80,
+                        help='Batch size for processing (default: 80).')
+    parser.add_argument('--config', nargs='*', metavar='CONFIG',
+                        help='Select configurations to run (case-insensitive).\n'
+                             'Options: to-nemeth, to-ueb, from-nemeth, from-ueb.\n'
+                             'If not specified, all configurations are run.')
 
     args = parser.parse_args()
 
-    # Parse output_type to determine gen_braille
-    output_type_lower = args.output_type.lower()
-    if output_type_lower not in ('braille', 'mathml'):
-        parser.error(
-            f'output_type must be "braille" or "mathml", got "{args.output_type}". '
-            f'Example: python use_gemini.py mathml Nemeth 200'
-        )
-    gen_braille = output_type_lower == 'braille'
+    # Convert negative numbers to None (meaning "all")
+    n_examples = None if args.examples < 0 else args.examples
+    n_tests = None if args.tests < 0 else args.tests
 
-    # Call the refactored function with parsed arguments
-    run_conversion(gen_braille, args.braille_code, args.chunk_size)
+    # Map configuration strings to conversion parameters (case-insensitive)
+    # Map: (gen_braille, braille_code)
+    config_map = {
+        'to-nemeth': (True, 'Nemeth'),
+        'to-ueb': (True, 'UEB'),
+        'from-nemeth': (False, 'Nemeth'),
+        'from-ueb': (False, 'UEB'),
+    }
+
+    # All possible configurations
+    all_conversion_params = [
+        (True, 'Nemeth'),
+        (True, 'UEB'),
+        (False, 'Nemeth'),
+        (False, 'UEB'),
+    ]
+
+    # Filter configurations based on provided arguments (case-insensitive)
+    selected_configs = []
+    if args.config:
+        # Normalize to lowercase for case-insensitive matching
+        provided_configs = [c.lower() for c in args.config]
+        valid_configs = {k.lower(): v for k, v in config_map.items()}
+
+        invalid_configs = []
+        for config_str in provided_configs:
+            if config_str in valid_configs:
+                if valid_configs[config_str] not in selected_configs:
+                    selected_configs.append(valid_configs[config_str])
+            else:
+                invalid_configs.append(config_str)
+
+        if invalid_configs:
+            print(f"Error: Invalid configuration(s): {', '.join(invalid_configs)}")
+            print(f"Valid options are: {', '.join(config_map.keys())}")
+            sys.exit(1)
+
+        if not selected_configs:
+            print("Error: No valid configurations selected.")
+            sys.exit(1)
+    else:
+        # No configs specified, use all
+        selected_configs = all_conversion_params
+
+    conversion_params = selected_configs
+
+    # Prepare all configurations before asking for confirmation
+    print("\n=== Preparing Configurations ===")
+    configs_data = []
+
+    for gen_braille, braille_code in conversion_params:
+        try:
+            config_data = prepare_conversion_config(
+                gen_braille, braille_code, n_examples, n_tests, args.batch_size
+            )
+            configs_data.append(config_data)
+        except Exception as e:
+            print(f"Error preparing config for {braille_code} ({'braille' if gen_braille else 'MathML'}): {e}")
+            sys.exit(1)
+
+    # Display first configuration
+    print("\n=== Full Configuration ===")
+    config, instructions, test_input, expected, model, apiKeyName = configs_data[0]
+    conversion_type = f"{'Generate Braille' if config.gen_braille else 'Generate MathML'} ({config.braille_code})"
+    print(f"\n--- Configuration 1/{len(configs_data)}: {conversion_type} ---")
+    config_str = config.print_config(n_tests=len(test_input), short=True)
+    print(config_str)
+
+    # Ask for confirmation once
+    print("\n=== Confirmation ===")
+    print("Is this correct? (y/yes to proceed, anything else to exit): ", end='', flush=True)
+    response = input().strip().lower()
+    confirmed = response in ('y', 'yes')
+    if not confirmed:
+        print("Exiting without processing.")
+        sys.exit(0)
+
+    # Create threads for each conversion
+    threads = []
+    for config, instructions, test_input, expected, model, apiKeyName in configs_data:
+        thread = threading.Thread(
+            target=run_conversion,
+            args=(config, instructions, test_input, expected, model, apiKeyName, args.batch_size)
+        )
+        threads.append(thread)
+
+    # Start all threads
+    for thread in threads:
+        thread.start()
+
+    # Wait for all threads to complete
+    for thread in threads:
+        thread.join()
 
 
 if __name__ == "__main__":
